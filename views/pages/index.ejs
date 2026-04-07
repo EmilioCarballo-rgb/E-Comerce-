@@ -1,0 +1,16 @@
+<h1><%= user.firstName %> <%= user.secondName %> ! </h1>
+
+<%if (user.isAdmin) { %>
+    <div style="background: #ddd; padding: 0.5em;" Administrador </div>
+<%} %>
+
+<h2>Tus Tareas</h2>
+
+<ol> 
+    <% for (const product of products) {%>
+    <li>
+        <h3><%= product.title %></h3>
+        <p><%= product.description %></p>
+    </li>
+    <% } %>   
+</ol>
