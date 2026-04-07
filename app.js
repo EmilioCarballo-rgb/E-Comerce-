@@ -59,6 +59,13 @@ app.get("/checkout", (req, res)=> {res.render ("pages/checkout", {products, user
 app.get("/register", (req, res)=> {res.render ("pages/register", {products, user})})
 app.get("/login", (req, res)=> {res.render ("pages/login", {products,user })})
 
+app.post("/register", (req, res) => {
+  res.redirect("/");
+});
+app.post("/login", (req, res) => { 
+  res.redirect("/");
+});
+
 app.listen(port, ()=> console.log("Servidor abierto"));
 
 
