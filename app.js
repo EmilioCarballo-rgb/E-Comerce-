@@ -20,6 +20,4 @@ const products = [
 
 app.get("/", (req, res )=> {res.render("pages/index", {user, products})});
 
-
-
 app.listen(port, ()=> console.log("Server abierto como el culo del flaco"));
