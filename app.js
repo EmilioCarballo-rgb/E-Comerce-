@@ -54,7 +54,7 @@ app.get("/products/:id", (req, res) => {
     }
 });
 
-app.get("/cart", (req, res)=> {res.render ("pages/cart", {user})})
+app.get("/cart", (req, res)=> {res.render ("pages/cart", {products, user})})
 app.get("/checkout", (req, res)=> {res.render ("pages/checkout", {products, user})})
 app.get("/register", (req, res)=> {res.render ("pages/register", {products, user})})
 app.get("/login", (req, res)=> {res.render ("pages/login", {products,user })})
