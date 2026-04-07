@@ -19,11 +19,11 @@ const products = [
 ]
 
 app.get("/", (req, res )=> {res.render("pages/index", {user, products})});
-app.get("/products", (req, res)=> {res.render ("pages/products", {products})})
-app.get("/cart", (req, res)=> {res.render ("pages/cart", {products})})
-app.get("/checkout", (req, res)=> {res.render ("pages/checkout", {products})})
-app.get("/register", (req, res)=> {res.render ("pages/register", {products})})
-app.get("/login", (req, res)=> {res.render ("pages/login", {products})})
+app.get("/products", (req, res)=> {res.render ("pages/products", {products,user})})
+app.get("/cart", (req, res)=> {res.render ("pages/cart", {products, user})})
+app.get("/checkout", (req, res)=> {res.render ("pages/checkout", {products, user})})
+app.get("/register", (req, res)=> {res.render ("pages/register", {products, user})})
+app.get("/login", (req, res)=> {res.render ("pages/login", {products,user })})
 
 
 
