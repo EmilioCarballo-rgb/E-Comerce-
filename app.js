@@ -1,5 +1,4 @@
 const express = require ('express');
-
 const app = express();
 const port = 3000;
 
@@ -18,6 +17,30 @@ const products = [
 	{ title: "Yerba baldo", description: "Segun el gordo esta barata." },
 	{ title: "Bombilla", description: "De cuero encurtido." },
 ]
+
+let cart = [
+    { 
+        id: 1, 
+        title: "Mate", 
+        price: 15.000, 
+        quantity: 1, 
+        image: "https://url-imagen-1.jpg" 
+    },
+    { 
+        id: 2, 
+        title: "Yerba Balbo", 
+        price: 5000, 
+        quantity: 1, 
+        image: "https://url-imagen-2.jpg" 
+    }, 
+    { 
+        id: 3, 
+        title: "Bombilla", 
+        price: 3500, 
+        quantity: 1, 
+        image: "https://url-imagen-3.jpg" 
+    }
+];
 
 
 app.get("/", (req, res )=> {res.render("pages/index", {user, products})});
