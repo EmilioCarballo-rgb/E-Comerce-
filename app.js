@@ -17,14 +17,14 @@ const products = [
     id:1,
     title: "Mate", 
     description: "Mate Imperial de Madera", 
-    price: "$15000", 
+    price: 15000, 
     image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRP1O25vTC92joON5LaHxuUuhXnVoL1VerBaO7Cb7J1Pf25_wInn3fbBqw02Bu_1-VRnudDjOUnM4eRJipnE-aj1YU2ZXOjjTlIr9sMM3uW9fQSVBMg8YiqSU0g1Nx0eoDSC1mDBg&usqp=CAc" 
   },
   { 
     id:2,
     title: "Yerba baldo", 
     description: "Baldo.", 
-    price: "$12500", 
+    price: 12500, 
     image: "https://dcdn-us.mitiendanube.com/stores/003/785/409/products/img_9646-555cdc320e74ba0b2e17157276494120-1024-1024.webp" 
   },
   { 
@@ -48,7 +48,7 @@ const products = [
     id:5,
     title: "Bombilla", 
     description: "Pico Loro.", 
-    price: "$8000", 
+    price: 8000, 
     image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
   },
 
@@ -57,7 +57,7 @@ const products = [
     id:6,
     title: "Bombilla", 
     description: "Pico Loro.", 
-    price: "$8000", 
+    price: 8000, 
     image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
   },
 
@@ -65,7 +65,7 @@ const products = [
     id:7,
     title: "Bombilla", 
     description: "Pico Loro.", 
-    price: "$8000", 
+    price: 8000, 
     image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
   }
 
