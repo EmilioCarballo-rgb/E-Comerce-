@@ -2,43 +2,106 @@
 
 <main style="padding: 40px 10%">
 
-    <a href="/"style="background: #4a4e54; color: white; border: none; padding: 12px 24px; border-radius: 20px; cursor: pointer; margin-bottom: 10px; font-size: 1.0rem; text-decoration: none;">Volver al inicio</a>
+    <a href="/" style="background: #4a4e54; color: white; border: none; padding: 12px 24px; border-radius: 20px; cursor: pointer; margin-bottom: 10px; font-size: 1.0rem; text-decoration: none;">Volver al inicio</a>
     <h2 style="margin: 30px 0;">Productos en tu Carrito</h2>
 
     <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
 
         <% for (const product of products) { %>
-            <article style="width: 100%; max-width: 900px; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: row; align-items: center; padding: 15px 30px;">
+            <article class="item-carrito" data-id="<%= product.id %>" style="width: 100%; max-width: 900px; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: row; align-items: center; padding: 15px 30px;">
                 
-    <img src="<%= product.image %>" alt="<%= product.title %>" style="width: 60px; height: 60px; object-fit: contain; margin-right: 20px;">
+                <img src="<%= product.image %>" alt="<%= product.title %>" style="width: 60px; height: 60px; object-fit: contain; margin-right: 20px;">
 
-    <div style="flex-grow: 1; text-align: left;">
-        <h3 style="font-size: 1.1rem; margin: 0; color: #333;"><%= product.title %></h3>
-        </div>
+                <div style="flex-grow: 1; text-align: left;">
+                    <h3 style="font-size: 1.1rem; margin: 0; color: #333;"><%= product.title %></h3>
+                </div>
 
-    <div style="display: flex; align-items: center; gap: 20px;">
-        
-        <button style="background: #5a5f66; color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-size: 0.9rem;">Quitar</button>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    
+                    <button class="btn-quitar" style="background: #5a5f66; color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-size: 0.9rem;">Quitar</button>
 
-        <div style="display: flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 20px; padding: 4px 15px;">
-            <button style="background: none; border: none; cursor: pointer; font-weight: bold; color: #666;"> - </button>
-            <span style="margin: 0 15px;">1</span> 
-            <button style="background: none; border: none; cursor: pointer; font-weight: bold; color: #666;"> + </button>
-        </div>
+                    <div style="display: flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 20px; padding: 4px 15px;">
+                        <button class="btn-menos" style="background: none; border: none; cursor: pointer; font-weight: bold; color: #666;"> - </button>
+                        <span class="cantidad" style="margin: 0 15px;"><%= product.quantity %></span> 
+                        <button class="btn-mas" style="background: none; border: none; cursor: pointer; font-weight: bold; color: #666;"> + </button>
+                    </div>
 
-        <p style="font-size: 1.3rem; font-weight: bold; color: #333; margin: 0; min-width: 90px; text-align: right;">
-            $<%= product.price %>
-        </p>
+                    <p class="precio-subtotal" data-precio="<%= product.price %>" style="font-size: 1.3rem; font-weight: bold; color: #333; margin: 0; min-width: 90px; text-align: right;">
+                        $<%= product.price * product.quantity %>
+                    </p>
 
-    </div>
+                </div>
 
-</article>
+            </article>
         <% } %>
 
     </div>
 
-    <div style="text-align: right; margin-top: 40px;">
-        <button style="background-color: #4a4e54; color: white; padding: 15px 40px; border: none; border-radius: 25px; font-size: 16px; cursor: pointer;">Ir a Pagar</button>
+    <div style="text-align: right; margin-top: 40px; border-top: 2px solid #ccc; padding-top: 20px;">
+        <h3 style="font-size: 24px; color: #333;">Total a Pagar: 
+            <span id="gran-total" style="margin-left: 20px; color: #e44d26;">$<%= total %></span>
+        </h3>
+        <a href="/checkout"><button style="background-color: #4a4e54; color: white; padding: 15px 40px; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin-top: 15px;">Ir a Pagar</button></a>
     </div>
 </main>
+
+<script>
+    const tarjetasDeProducto = document.querySelectorAll('.item-carrito');
+    const textoTotalAPagar = document.getElementById('gran-total');
+
+    function actualizarTotalAPagar() {
+        let sumaTotal = 0;
+        document.querySelectorAll('.precio-subtotal').forEach(elementoPrecio => {
+            let subtotal = parseInt(elementoPrecio.innerText.replace('$', ''));
+            sumaTotal += subtotal;
+        });
+        textoTotalAPagar.innerText = '$' + sumaTotal;
+    }
+
+    tarjetasDeProducto.forEach(tarjeta => {
+        const botonSumar = tarjeta.querySelector('.btn-mas');
+        const botonRestar = tarjeta.querySelector('.btn-menos');
+        const botonQuitar = tarjeta.querySelector('.btn-quitar'); 
+        
+        const textoCantidad = tarjeta.querySelector('.cantidad');
+        const textoSubtotal = tarjeta.querySelector('.precio-subtotal');
+        const idDelProducto = tarjeta.getAttribute('data-id'); 
+        const precioUnitario = parseInt(textoSubtotal.getAttribute('data-precio'));
+
+        // Lógica para Sumar
+        botonSumar.addEventListener('click', () => {
+            let cantidadActual = parseInt(textoCantidad.innerText);
+            cantidadActual++;
+            textoCantidad.innerText = cantidadActual;
+            textoSubtotal.innerText = '$' + (cantidadActual * precioUnitario);
+            actualizarTotalAPagar();
+            fetch(`/actualizar-cantidad/${idDelProducto}/sumar`);
+        });
+
+        // Lógica para Restar
+        botonRestar.addEventListener('click', () => {
+            let cantidadActual = parseInt(textoCantidad.innerText);
+            if (cantidadActual > 1) {
+                cantidadActual--;
+                textoCantidad.innerText = cantidadActual;
+                textoSubtotal.innerText = '$' + (cantidadActual * precioUnitario);
+                actualizarTotalAPagar();
+                fetch(`/actualizar-cantidad/${idDelProducto}/restar`);
+            }
+        });
+
+        // Lógica para el botón QUITAR (Corregida con persistencia segura)
+        botonQuitar.addEventListener('click', () => {
+            // 1. Borramos de la memoria del servidor (Persistencia)
+            fetch(`/quitar-del-carrito/${idDelProducto}`)
+                .then(() => {
+                    // 2. Si el servidor nos dice que todo salió bien, lo sacamos de la vista
+                    tarjeta.remove();
+                    // 3. Recalculamos el total general
+                    actualizarTotalAPagar();
+                });
+        });
+    });
+</script>
+
 <%- include('./partials/footer') %>

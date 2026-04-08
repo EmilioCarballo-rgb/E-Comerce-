@@ -8,11 +8,13 @@ const user = {
     firstName: 'E-Comerce',
     secondName: 'De La Banda',
     isAdmin: true,
-    
 };
 
+// 1. Memoria del carrito
+let cart = [];
+
+// 2. Precios limpios para poder sumar matemáticamente
 const products = [
-	
   { 
     id:1,
     title: "Mate", 
@@ -31,19 +33,16 @@ const products = [
     id:3,
     title: "Bombilla", 
     description: "Pico Loro.", 
-    price: "$8000", 
+    price: 8000, 
     image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
   },
-
   { 
     id:4,
     title: "Termo", 
     description: "Stanley.", 
-    price: "$146.000", 
+    price: 146000, 
     image: "https://stanleypm.vtexassets.com/arquivos/ids/161627-300-300?v=639096064169430000&width=300&height=300&aspect=true"
   },
-
-
   { 
     id:5,
     title: "Bombilla", 
@@ -51,8 +50,6 @@ const products = [
     price: 8000, 
     image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
   },
-
-
   { 
     id:6,
     title: "Bombilla", 
@@ -60,7 +57,6 @@ const products = [
     price: 8000, 
     image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
   },
-
   { 
     id:7,
     title: "Bombilla", 
@@ -68,19 +64,12 @@ const products = [
     price: 8000, 
     image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
   }
-
-
-
 ]
-
 
 app.get("/", (req, res )=> {res.render("pages/index", {user, products})});
 
 app.get("/products/:id", (req, res) => {
-
     const idSeleccionado = parseInt(req.params.id); 
-
-    
     const productoEncontrado = products.find( p => p.id === idSeleccionado );
 
     if (productoEncontrado) {
@@ -90,20 +79,60 @@ app.get("/products/:id", (req, res) => {
     }
 });
 
-app.get("/cart", (req, res)=> {res.render ("pages/cart", {products, user})})
+
+app.get("/agregar-al-carrito/:id", (req, res) => {
+    const idProducto = parseInt(req.params.id); 
+    const productoElegido = products.find(p => p.id === idProducto);
+    
+    if (productoElegido) {
+        const productoEnCarrito = cart.find(p => p.id === idProducto);
+        if (productoEnCarrito) {
+            productoEnCarrito.quantity += 1;
+        } else {
+            cart.push({ ...productoElegido, quantity: 1 });
+        }
+    }
+    res.redirect("/"); 
+});
+
+app.get("/actualizar-cantidad/:id/:accion", (req, res) => {
+    const idProducto = parseInt(req.params.id); 
+    const accion = req.params.accion; 
+     
+    const productoEnCarrito = cart.find(p => p.id === idProducto);
+    
+    if (productoEnCarrito) {
+        if (accion === 'sumar') {
+            productoEnCarrito.quantity += 1;
+        } else if (accion === 'restar' && productoEnCarrito.quantity > 1) {
+            productoEnCarrito.quantity -= 1;
+        }
+    }
+    
+    res.send("OK"); 
+});
+
+app.get("/quitar-del-carrito/:id", (req, res) => {
+    const idProducto = parseInt(req.params.id);
+    
+    cart = cart.filter(p => p.id !== idProducto);
+    
+    res.send("OK");
+});
+
+app.get("/cart", (req, res)=> {
+    let totalAcumulado = 0;
+    cart.forEach(p => {
+        totalAcumulado += (p.price * p.quantity);
+    });
+    res.render("pages/cart", { products: cart, user, total: totalAcumulado });
+});
+
 app.get("/checkout", (req, res)=> {res.render ("pages/checkout", {products, user})})
 app.get("/register", (req, res)=> {res.render ("pages/register", {products, user})})
 app.get("/login", (req, res)=> {res.render ("pages/login", {products,user })})
 
-app.post("/register", (req, res) => {
-  res.redirect("/");
-});
-app.post("/login", (req, res) => { 
-  res.redirect("/");
-});
+app.post("/register", (req, res) => { res.redirect("/"); });
+app.post("/login", (req, res) => { res.redirect("/"); });
 
 app.listen(port, ()=> console.log("Servidor abierto"));
-
-
-
-
