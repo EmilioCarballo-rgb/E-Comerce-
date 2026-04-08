@@ -1,5 +1,7 @@
 <%- include('./partials/header') %>
 
+<%- include('./partials/categoryBar') %>
+
 <main style="padding: 40px 5%; font-family: Arial, sans-serif;">
     <h2 style="text-align: center; color: #333; margin-bottom: 30px;">Nuestros Productos</h2>
 
@@ -10,6 +12,32 @@
         <% } %>
 
     </div>
+
+    <section style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border: 2px solid #eaeaea; border-radius: 12px; margin: 40px 5% 0 5%; padding: 40px; box-shadow: 0px 8px 20px rgba(0,0,0,0.08); font-family: Arial, sans-serif;">
+    
+    <div style="flex: 1; padding-right: 20px;">
+        <h2 style="font-size: 2.5rem; color: #333; margin: 0 0 15px 0;">
+            Llevate el <span style="color: #e44d26;">Kit Matero Premium</span>
+        </h2>
+        
+        <p style="font-size: 1.2rem; color: #555; margin-bottom: 25px; line-height: 1.5;">
+            Aprovecha nuestra oferta especial de esta semana. Incluye mate imperial, bombilla pico de loro y yerba de regalo con un 20% de descuento. ¡Ideal para arrancar el día con unos buenos mates!
+        </p>
+        
+        <a href="/products/1" style="text-decoration: none;">
+            <button style="padding: 12px 25px; background-color: #363d46; color: white; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; font-weight: bold;">
+                Ver Promoción
+            </button>
+        </a>
+    </div>
+
+    <div style="flex: 1; text-align: center;">
+        <img src="https://www.belloexport.com.ar/wp-content/uploads/2018/08/P07908.jpg" alt="Promoción Kit Matero" style="max-width: 100%; height: auto; border-radius: 8px; transform: rotate(-2deg);">
+    </div>
+
+</section>
 </main>
+
+<%- include('./partials/categoryBar') %>
 
 <%- include('./partials/footer') %>

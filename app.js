@@ -33,7 +33,43 @@ const products = [
     description: "Pico Loro.", 
     price: "$8000", 
     image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
+  },
+
+  { 
+    id:4,
+    title: "Termo", 
+    description: "Stanley.", 
+    price: "$146.000", 
+    image: "https://stanleypm.vtexassets.com/arquivos/ids/161627-300-300?v=639096064169430000&width=300&height=300&aspect=true"
+  },
+
+
+  { 
+    id:5,
+    title: "Bombilla", 
+    description: "Pico Loro.", 
+    price: "$8000", 
+    image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
+  },
+
+
+  { 
+    id:6,
+    title: "Bombilla", 
+    description: "Pico Loro.", 
+    price: "$8000", 
+    image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
+  },
+
+  { 
+    id:7,
+    title: "Bombilla", 
+    description: "Pico Loro.", 
+    price: "$8000", 
+    image: "https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg"
   }
+
+
 
 ]
 
