@@ -1,49 +1,149 @@
 <%- include('./partials/header') %>
-
 <%- include('./partials/categoryBar') %>
+
 <style>
-  body {
-    background-color: #EAE3D2;
-    margin: 0;
-  }
+    /* Estilos generales del fondo */
+    body {
+        background-color: #EAE3D2;
+        margin: 0;
+    }
+
+    /* Contenedor principal del main */
+    .home-main {
+        padding: 40px 5%;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Título de bienvenida */
+    .home-title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    /* Grilla donde se acomodan las tarjetas de productos */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    /* --- ESTILOS DE LA SECCIÓN DE PROMOCIÓN --- */
+    .promo-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        border: 2px solid #eaeaea;
+        border-radius: 12px;
+        margin: 40px 5% 0 5%;
+        padding: 40px;
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .promo-text-box {
+        flex: 1;
+        padding-right: 20px;
+    }
+
+    .promo-title {
+        font-size: 2.5rem;
+        color: #333;
+        margin: 0 0 15px 0;
+    }
+
+    .promo-highlight {
+        color: #e44d26;
+    }
+
+    .promo-desc {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 25px;
+        line-height: 1.5;
+    }
+
+    .promo-link {
+        text-decoration: none;
+    }
+
+    .promo-btn {
+        padding: 12px 25px;
+        background-color: #363d46;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .promo-btn:hover {
+        background-color: #2a2f36; 
+    }
+
+    .promo-img-box {
+        flex: 1;
+        text-align: center;
+    }
+
+    .promo-img {
+        max-width: 80%;
+        height: auto;
+        border-radius: 8px;
+        transform: rotate(-2deg);
+    }
 </style>
 
-<main style="padding: 40px 5%; font-family: Arial, sans-serif;">
-    <h2 style="text-align: center; color: #333; margin-bottom: 30px;">Nuestros Productos</h2>
+<main class="home-main">
+    <h2 class="home-title">¡Bienvenido a Mateando🧉!</h2>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-        
+    <div class="product-grid">
         <% for (const product of products) { %>
             <%- include('./partials/productCard', { product: product }) %>
         <% } %>
-
     </div>
 
-    <section style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border: 2px solid #eaeaea; border-radius: 12px; margin: 40px 5% 0 5%; padding: 40px; box-shadow: 0px 8px 20px rgba(0,0,0,0.08); font-family: Arial, sans-serif;">
-    
-    <div style="flex: 1; padding-right: 20px;">
-        <h2 style="font-size: 2.5rem; color: #333; margin: 0 0 15px 0;">
-            Llevate el <span style="color: #e44d26;">Kit Matero Premium</span>
-        </h2>
-        
-        <p style="font-size: 1.2rem; color: #555; margin-bottom: 25px; line-height: 1.5;">
-            Aprovecha nuestra oferta especial de esta semana. Incluye mate imperial, bombilla pico de loro y yerba de regalo con un 20% de descuento. ¡Ideal para arrancar el día con unos buenos mates!
-        </p>
-        
-        <a href="/products/1" style="text-decoration: none;">
-            <button style="padding: 12px 25px; background-color: #363d46; color: white; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; font-weight: bold;">
-                Ver Promoción
-            </button>
-        </a>
-    </div>
+    <section class="promo-section">
+        <div class="promo-text-box">
+            <h2 class="promo-title">
+                Llevate el <span class="promo-highlight">Kit Matero Premium</span>
+            </h2>
+            
+            <p class="promo-desc">
+                Aprovecha nuestra oferta especial de esta semana. Incluye mate imperial, bombilla pico de loro y yerba de regalo con un 20% de descuento. ¡Ideal para arrancar el día con unos buenos mates!
+            </p>
+            
+            <a href="/products/1" class="promo-link">
+                <button class="promo-btn">Ver Promoción</button>
+            </a>
+        </div>
 
-    <div style="flex: 1; text-align: center;">
-        <img src="https://www.belloexport.com.ar/wp-content/uploads/2018/08/P07908.jpg" alt="Promoción Kit Matero" style="max-width: 100%; height: auto; border-radius: 8px; transform: rotate(-2deg);">
-    </div>
+        <div class="promo-img-box">
+            <img src="https://www.belloexport.com.ar/wp-content/uploads/2018/08/P07908.jpg" alt="Promoción Kit Matero" class="promo-img">
+        </div>
+    </section>
+<section class="promo-section">
+        <div class="promo-text-box">
+            <h2 class="promo-title">
+                ¡Nuevo Ingreso! <span class="promo-highlight">Mate Imperial</span>
+            </h2>
+            
+            <p class="promo-desc">
+                ¡Llegó el ingreso más esperado de la semana! Conocé nuestro nuevo Mate Imperial, diseñado para los materos más exigentes. Calabaza seleccionada, cuero de primera y detalles únicos en alpaca. ¡Ideal para arrancar el día con unos buenos mates!
+            </p>
+            
+            <a href="/products/5" class="promo-link">
+                <button class="promo-btn">Ver Nuevo Ingreso</button>
+            </a>
+        </div>
 
-</section>
+        <div class="promo-img-box">
+            <img src="https://imgs.search.brave.com/sJi2V9pDBgoI3CJVf0BsJsPW8HCMRd0VAY96Oxe8Av0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9hY2Ru/LXVzLm1pdGllbmRh/bnViZS5jb20vc3Rv/cmVzLzAwNS82NzYv/MDMzL3Byb2R1Y3Rz/L2ltcGVyaWFsLXBl/cXVlbm8tZjdjOTQw/ZmU4ZWU4NDAwNzNi/MTczNzIxOTYwNzI5/MjQtMjQwLTAuanBl/Zw" alt="Promoción Kit Matero" class="promo-img">
+        </div>
+    </section>
 </main>
 
 <%- include('./partials/categoryBar') %>
-
 <%- include('./partials/footer') %>
