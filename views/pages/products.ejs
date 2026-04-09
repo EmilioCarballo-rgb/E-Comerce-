@@ -35,9 +35,13 @@
         
         <p><%= products.description%></p>
 
-        <button style="background-color: #363d46; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.1rem; width: 100%; margin-top: 20px;">
+        <a href="/agregar-al-carrito/<%= products.id %>" style="text-decoration: none; display: block; margin-top: 20px;">
+            <button style="background-color: #363d46; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.1rem; width: 100%;">
             Agregar al carrito
-        </button>
+            </button>
+        </a>
+
+        
     </div>
 
 </main>
