@@ -1,54 +1,87 @@
-<header style="display: flex; justify-content: space-between; align-items: center; background-color: #83af31; padding: 15px 5%; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); font-family:Arial, Helvetica, sans-serif;">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
-  
-  <div style="color:#EAE3D2 ;">
-    <a href="/" style="text-decoration: none;
-    color: inherit;">
-     <h1>Mateando🧉</h1>
-    </a>
-  </div>
- 
+<style>
+    .main-header {
+        display: flex;
+        justify-content: space-between; 
+        align-items: center; 
+        flex-wrap: wrap; 
+        background-color: #83af31;
+        padding: 15px 5%;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
-  <div style=" display:flex;
+    .header-logo {
+        color: #EAE3D2;
+        text-decoration: none;
+    }
+    
+    .header-logo h1 {
+        margin: 0; 
+    }
+
+    .header-search {
+        display: flex;
         flex: 1;
         max-width: 400px;
-        margin: 0 20px;">
+        margin: 0 20px;
+    }
 
-        <input style= "width: 100%;
-        padding: 15px;
-        border: 1px solid oklab(34.495% 0.00048 -0.00169);
+    .header-search input {
+        width: 100%;
+        padding: 12px 15px; 
+        border: 1px solid #ccc;
         border-radius: 5px 0 0 5px;
-        outline: none;" 
-        placeholder="Buscar Productos">
+        outline: none;
+    }
 
-        <button style= "padding: 10px 20px;
-        background-color: #363d46; 
+    .header-search button {
+        padding: 10px 20px;
+        background-color: #363d46;
         color: white;
         border: none;
         border-radius: 0 5px 5px 0;
-        cursor: pointer;"> 
-        🔍
-      </button>  
+        cursor: pointer;
+    }
+
+    .header-nav {
+        display: flex;
+        gap: 25px; 
+        align-items: center;
+    }
+
+    .header-nav a {
+        color: #EAE3D2;
+        font-size: 1.4rem;
+        text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+        .header-search {
+            order: 3; 
+            max-width: 100%; 
+            flex-basis: 100%; 
+            margin: 15px 0 0 0; 
+        }
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<header class="main-header">
     
-  </div>
+    <a href="/" class="header-logo">
+        <h1>Mateando🧉</h1>
+    </a>
 
-  <div>
-    <nav style="margin-top: 1.5em; display: flex; gap: 30px; justify-content: center; align-items: center;">
-      
-      <a href="/login" title="Iniciar Sesión" style="color: #EAE3D2; font-size: 1.5rem; text-decoration: none;">
-        <i class="fa-solid fa-user"></i>
-      </a>
-      
-      <a href="/register" title="Registrarse" style="color: #EAE3D2; font-size: 1.5rem; text-decoration: none;">
-        <i class="fa-solid fa-user-plus"></i>
-      </a>
-      
-      <a href="/cart" title="Carrito" style="color: #EAE3D2; font-size: 1.5rem; text-decoration: none;">
-        <i class="fa-solid fa-cart-shopping"></i>
-      </a>
+    <div class="header-search">
+        <input type="text" placeholder="Buscar Productos">
+        <button type="submit">🔍</button>
+    </div>
 
+    <nav class="header-nav">
+        <a href="/login" title="Iniciar Sesión"><i class="fa-solid fa-user"></i></a>
+        <a href="/register" title="Registrarse"><i class="fa-solid fa-user-plus"></i></a>
+        <a href="/cart" title="Carrito"><i class="fa-solid fa-cart-shopping"></i></a>
     </nav>
-  </div>
+
 </header>
-   
