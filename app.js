@@ -108,14 +108,14 @@ const products = [
   },
    { 
     id:14,
-    title: "Matera de Cuero", category: "bolsos",
+    title: "Matera de Cuero", category: "materas",
     description: "Materas de Cuero: Prácticas y resistentes. Fabricadas en cuero legítimo, diseñadas para transportar tu kit matero con seguridad y estilo a cualquier lugar.", 
     price: 12000, 
     image: "https://imgs.search.brave.com/dsM3wTva07B0C6TA26nc0QlEAEYtp7lsQe9reVyOvNA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9hY2Ru/LXVzLm1pdGllbmRh/bnViZS5jb20vc3Rv/cmVzLzAwMS81MzIv/OTMzL3Byb2R1Y3Rz/L2ltZ182NDk0MS00/ZTc1NWNjZDZlYzg3/NTQ1MjYxNjE1NTAz/NzA1OTc1OS0yNDAt/MC53ZWJw"
   },
    { 
     id:15,
-    title: "Matera Uruguaya", category: "bolsos",
+    title: "Matera Uruguaya", category: "materas",
     description: "Materas de Cuero tipo Uruguayas:Diseño minimalista y robusto con separadores internos, ideal para cargar el termo, el mate y el termo con la máxima comodidad.", 
     price: 14000, 
     image: "https://imgs.search.brave.com/jN68ZKA4LvR74a5o1CTERSvzofkXuvT_RWKH_TOJato/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/XzYxMTg2MS1NTEE3/OTExMzA3NTI4MF8w/OTIwMjQtRS53ZWJw"

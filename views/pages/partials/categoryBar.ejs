@@ -1,91 +1,32 @@
 <style>
-    .categorias-section {
-        padding: 20px 5%;
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #ddd;
-        margin-bottom: 20px;
-    }
+    .categorias-section { padding: 20px 5%; background-color: #f8f9fa; border-bottom: 1px solid #ddd; margin-bottom: 20px; }
+    .categorias-container { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
+    .categoria-link { text-decoration: none; color: inherit; }
+    .categoria-card { background-color: white; border: 1px solid #363d46; padding: 15px 25px; border-radius: 8px; text-align: center; min-width: 120px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .categoria-link:hover .categoria-card { transform: translateY(-5px); box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1); }
+    .categoria-icono { display: block; font-size: 1.5rem; margin-bottom: 5px; }
+    .categoria-titulo { font-weight: bold; color: #363d46; font-family: Arial, sans-serif; }
 
-    .categorias-container {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        flex-wrap: wrap;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .categoria-link {
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .categoria-card {
-        background-color: white;
-        border: 1px solid #363d46;
-        padding: 15px 25px;
-        border-radius: 8px;
-        text-align: center;
-        min-width: 120px;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .categoria-link:hover .categoria-card {
-        transform: translateY(-5px);
-        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .categoria-icono {
-        display: block;
-        font-size: 1.5rem;
-        margin-bottom: 5px;
-    }
-
-    .categoria-titulo {
-        font-weight: bold;
-        color: #363d46;
-        font-family: Arial, sans-serif;
+    @media (max-width: 768px) {
+        .categorias-section { padding: 15px 0; }
+        .categorias-container { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; padding: 0 5%; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .categorias-container::-webkit-scrollbar { display: none; }
+        .categoria-link { flex-shrink: 0; scroll-snap-align: start; }
+        .categoria-card { padding: 10px 15px; min-width: 100px; }
     }
 </style>
 
 <section class="categorias-section">
     <div class="categorias-container">
-
-        <a href="/category/mates" class="categoria-link">
-            <div class="categoria-card">
-                <span class="categoria-icono">🧉</span>
-                <span class="categoria-titulo">Mates</span>
-            </div>
-        </a>
-
-        <a href="/category/termos" class="categoria-link">
-            <div class="categoria-card">
-                <span class="categoria-icono">🍶</span>
-                <span class="categoria-titulo">Termos</span>
-            </div>
-        </a>
-
-        <a href="/category/yerbas" class="categoria-link">
-            <div class="categoria-card">
-                <span class="categoria-icono">🌿</span>
-                <span class="categoria-titulo">Yerbas</span>
-            </div>
-        </a>
-
-        <a href="/category/materas" class="categoria-link">
-            <div class="categoria-card">
-                <span class="categoria-icono">👜</span>
-                <span class="categoria-titulo">Materas</span>
-            </div>
-        </a>
-
+        <a href="/category/mates" class="categoria-link"><div class="categoria-card"><span class="categoria-icono">🧉</span><span class="categoria-titulo">Mates</span></div></a>
+        <a href="/category/termos" class="categoria-link"><div class="categoria-card"><span class="categoria-icono">🍶</span><span class="categoria-titulo">Termos</span></div></a>
+        <a href="/category/yerbas" class="categoria-link"><div class="categoria-card"><span class="categoria-icono">🌿</span><span class="categoria-titulo">Yerbas</span></div></a>
+        <a href="/category/materas" class="categoria-link"><div class="categoria-card"><span class="categoria-icono">👜</span><span class="categoria-titulo">Materas</span></div></a>
         <a href="/category/bombillas" class="categoria-link">
             <div class="categoria-card">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBdl2AeCizxCI7ovTzQjQd6YYjqLTFL8YO_Q&s" alt="Bombillas" class="categoria-icono" style="width: 34px; height:34px; object-fit: contain; margin:0 auto 5px auto;">
                 <span class="categoria-titulo">Bombillas</span>
             </div>
         </a>
-
     </div>
 </section>
