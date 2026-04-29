@@ -1,0 +1,109 @@
+<%- include('../partials/header') %>
+
+<style>
+    .cart-main { padding: 40px 10%; }
+    .btn-volver { background: #4a4e54; color: white; border: none; padding: 12px 24px; border-radius: 20px; cursor: pointer; margin-bottom: 10px; font-size: 1.0rem; text-decoration: none; display: inline-block; }
+    .cart-title { margin: 30px 0; }
+    .cart-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .item-carrito { width: 100%; max-width: 900px; background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: row; align-items: center; padding: 15px 30px; gap: 20px; }
+    .cart-img { width: 60px; height: 60px; object-fit: contain; }
+    .cart-info { flex-grow: 1; text-align: left; }
+    .cart-info h3 { font-size: 1.1rem; margin: 0; color: #333; }
+    .cart-controls { display: flex; align-items: center; gap: 20px; }
+    .btn-quitar { background: #5a5f66; color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; }
+    .cart-quantity-box { display: flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 20px; padding: 4px 15px; }
+    .cart-quantity-box button { background: none; border: none; cursor: pointer; font-weight: bold; color: #666; padding: 0 5px; }
+    .cantidad { margin: 0 15px; }
+    .precio-subtotal { font-size: 1.3rem; font-weight: bold; color: #333; margin: 0; min-width: 90px; text-align: right; }
+    .cart-summary { text-align: right; margin-top: 40px; border-top: 2px solid #ccc; padding-top: 20px; }
+    .cart-summary h3 { font-size: 24px; color: #333; }
+    #gran-total { margin-left: 20px; color: #e44d26; }
+    .btn-pagar { background-color: #4a4e54; color: white; padding: 15px 40px; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin-top: 15px; width: auto; }
+
+    @media (max-width: 768px) {
+        .cart-main { padding: 20px 5%; }
+        .item-carrito { flex-direction: column; align-items: flex-start; padding: 20px; position: relative; }
+        .cart-img { width: 80px; height: 80px; margin-bottom: 10px; }
+        .cart-info { width: 100%; margin-bottom: 15px; }
+        .cart-controls { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+        .btn-quitar { position: absolute; top: 15px; right: 15px; background: none; color: #d9534f; padding: 5px; text-decoration: underline; }
+        .cart-summary { text-align: center; }
+        .btn-pagar { width: 100%; }
+    }
+</style>
+
+<main class="cart-main">
+    <a href="/" class="btn-volver">Volver al inicio</a>
+    <h2 class="cart-title">Productos en tu Carrito</h2>
+    <div class="cart-container">
+        <% for (const product of products) { %>
+            <article class="item-carrito" data-id="<%= product.id %>">
+                <img src="<%= product.image %>" alt="<%= product.title %>" class="cart-img">
+                <div class="cart-info"><h3><%= product.title %></h3></div>
+                <div class="cart-controls">
+                    <button class="btn-quitar">Quitar</button>
+                    <div class="cart-quantity-box">
+                        <button class="btn-menos"> - </button>
+                        <span class="cantidad"><%= product.quantity %></span> 
+                        <button class="btn-mas"> + </button>
+                    </div>
+                    <p class="precio-subtotal" data-precio="<%= product.price %>">$<%= product.price * product.quantity %></p>
+                </div>
+            </article>
+        <% } %>
+    </div>
+    <div class="cart-summary">
+        <h3>Total a Pagar: <span id="gran-total">$<%= total %></span></h3>
+        <a href="/checkout"><button class="btn-pagar">Ir a Pagar</button></a>
+    </div>
+</main>
+
+<script>
+    const tarjetasDeProducto = document.querySelectorAll('.item-carrito');
+    const textoTotalAPagar = document.getElementById('gran-total');
+
+    function actualizarTotalAPagar() {
+        let sumaTotal = 0;
+        document.querySelectorAll('.precio-subtotal').forEach(elementoPrecio => {
+            let subtotal = parseInt(elementoPrecio.innerText.replace('$', ''));
+            sumaTotal += subtotal;
+        });
+        textoTotalAPagar.innerText = '$' + sumaTotal;
+    }
+
+    tarjetasDeProducto.forEach(tarjeta => {
+        const botonSumar = tarjeta.querySelector('.btn-mas');
+        const botonRestar = tarjeta.querySelector('.btn-menos');
+        const botonQuitar = tarjeta.querySelector('.btn-quitar'); 
+        const textoCantidad = tarjeta.querySelector('.cantidad');
+        const textoSubtotal = tarjeta.querySelector('.precio-subtotal');
+        const idDelProducto = tarjeta.getAttribute('data-id'); 
+        const precioUnitario = parseInt(textoSubtotal.getAttribute('data-precio'));
+
+        botonSumar.addEventListener('click', () => {
+            let cantidadActual = parseInt(textoCantidad.innerText);
+            cantidadActual++;
+            textoCantidad.innerText = cantidadActual;
+            textoSubtotal.innerText = '$' + (cantidadActual * precioUnitario);
+            actualizarTotalAPagar();
+            fetch(`/actualizar-cantidad/${idDelProducto}/sumar`);
+        });
+
+        botonRestar.addEventListener('click', () => {
+            let cantidadActual = parseInt(textoCantidad.innerText);
+            if (cantidadActual > 1) {
+                cantidadActual--;
+                textoCantidad.innerText = cantidadActual;
+                textoSubtotal.innerText = '$' + (cantidadActual * precioUnitario);
+                actualizarTotalAPagar();
+                fetch(`/actualizar-cantidad/${idDelProducto}/restar`);
+            }
+        });
+
+        botonQuitar.addEventListener('click', () => {
+            fetch(`/quitar-del-carrito/${idDelProducto}`).then(() => { tarjeta.remove(); actualizarTotalAPagar(); });
+        });
+    });
+</script>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+
+<style>
+    .detalle-contenedor {
+        display: flex;
+        gap: 40px;
+        padding: 40px 5%;
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .detalle-imagen {
+        flex: 1; 
+    }
+    .detalle-imagen img {
+        width: 100%;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+    .detalle-info {
+        flex: 1; 
+    }
+
+</style>
+
+<main class="detalle-contenedor">
+    
+    <div class="detalle-imagen">
+        <img src="<%= products.image%>" alt="<%= products.title %>">
+    </div>
+
+    <div class="detalle-info">
+        <h2><%= products.title %></h2>
+        <h3 style="color: #e44d26;"> <%=products.price %></h3>
+        
+        <p><%= products.description%></p>
+
+        <a href="/agregar-al-carrito/<%= products.id %>" style="text-decoration: none; display: block; margin-top: 20px;">
+            <button style="background-color: #363d46; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.1rem; width: 100%;">
+            Agregar al carrito
+            </button>
+        </a>
+
+        
+    </div>
+
+</main>
