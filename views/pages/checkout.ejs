@@ -1,69 +1,70 @@
 <%- include('../partials/header') %>
 
-    <main class="checkout-main">
-
-        <div class="checkout-container">
-
-            <div class="checkout-box checkout-form-col">
-                <h2 class="checkout-title">Detalles de Facturación</h2>
-
-                <form action="/procesar-pago" method="POST">
-
-                    <h3 class="checkout-subtitle">1. Datos Personales</h3>
-                    <div class="checkout-row">
-                        <div class="checkout-col">
-                            <label class="checkout-label">Nombre completo</label>
-                            <input type="text" class="checkout-input" placeholder="Ej: Franco">
-                        </div>
-                        <div class="checkout-col">
-                            <label class="checkout-label">Correo electrónico</label>
-                            <input type="email" class="checkout-input" placeholder="correo@ejemplo.com">
-                        </div>
+<main style="padding: 40px 5%; font-family: Arial, sans-serif; background-color: #f8f9fa; min-height: 80vh;">
+    
+    <div style="max-width: 1000px; margin: 0 auto; display: flex; gap: 40px; flex-wrap: wrap;">
+        
+        <div style="flex: 2; min-width: 300px; background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0px 4px 15px rgba(0,0,0,0.05);">
+            <h2 style="margin-top: 0; color: #333; border-bottom: 2px solid #eaeaea; padding-bottom: 10px;">Detalles de Facturación</h2>
+            
+            <form action="/procesar-pago" method="POST">
+                
+                <h3 style="font-size: 1.1rem; color: #555; margin-top: 20px;">1. Datos Personales</h3>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.9rem; color: #666;">Nombre completo</label>
+                        <input type="text" placeholder="Ej: Franco" style="width: 100%; padding: 12px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
                     </div>
-
-                    <h3 class="checkout-subtitle" style="margin-top: 10px;">2. Envío</h3>
-                    <label class="checkout-label">Dirección de entrega</label>
-                    <input type="text" class="checkout-input" placeholder="Calle y número">
-
-                    <h3 class="checkout-subtitle" style="margin-top: 10px;">3. Pago Seguro 🔒</h3>
-                    <label class="checkout-label">Número de Tarjeta</label>
-                    <input type="text" class="checkout-input" placeholder="0000 0000 0000 0000">
-
-                    <div class="checkout-row">
-                        <div class="checkout-col">
-                            <label class="checkout-label">Vencimiento</label>
-                            <input type="text" class="checkout-input" placeholder="MM/AA">
-                        </div>
-                        <div class="checkout-col">
-                            <label class="checkout-label">Cód. Seguridad (CVC)</label>
-                            <input type="text" class="checkout-input" placeholder="123">
-                        </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.9rem; color: #666;">Correo electrónico</label>
+                        <input type="email" placeholder="correo@ejemplo.com" style="width: 100%; padding: 12px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
                     </div>
-
-                    <button type="submit" class="checkout-btn">
-                        Confirmar Pago
-                    </button>
-                </form>
-            </div>
-            <div class="checkout-box checkout-summary-col">
-                <h3 class="checkout-title">Resumen</h3>
-
-                <div class="checkout-summary-item">
-                    <span>Subtotal</span>
-                    <strong>$ <%= total %></strong>
-                </div>
-                <div class="checkout-summary-item">
-                    <span>Envío</span>
-                    <strong>Gratis</strong>
                 </div>
 
-                <div class="checkout-summary-total">
-                    <strong>Total</strong>
-                    <strong class="checkout-total-price">$ <%= total %></strong>
-                </div>
-            </div>
+                <h3 style="font-size: 1.1rem; color: #555; margin-top: 10px;">2. Envío</h3>
+                <label style="font-size: 0.9rem; color: #666;">Dirección de entrega</label>
+                <input type="text" placeholder="Calle y número" style="width: 100%; padding: 12px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
 
+                <h3 style="font-size: 1.1rem; color: #555; margin-top: 10px;">3. Pago Seguro 🔒</h3>
+                <label style="font-size: 0.9rem; color: #666;">Número de Tarjeta</label>
+                <input type="text" placeholder="0000 0000 0000 0000" style="width: 100%; padding: 12px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+                
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.9rem; color: #666;">Vencimiento</label>
+                        <input type="text" placeholder="MM/AA" style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.9rem; color: #666;">Cód. Seguridad (CVC)</label>
+                        <input type="text" placeholder="123" style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+                </div>
+
+                <button type="submit" style="width: 100%; padding: 15px; margin-top: 30px; background-color: #363d46; color: white; border: none; border-radius: 8px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: 0.3s;">
+                    Confirmar Pago
+                </button>
+            </form>
         </div>
-    </main>
 
-    <%- include('../partials/footer') %>
+        <div style="flex: 1; min-width: 250px; background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0px 4px 15px rgba(0,0,0,0.05); height: fit-content;">
+            <h3 style="margin-top: 0; color: #333; border-bottom: 2px solid #eaeaea; padding-bottom: 10px;">Resumen</h3>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; color: #555;">
+                <span>Subtotal</span>
+                <strong>$ <%= total %></strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; color: #555;">
+                <span>Envío</span>
+                <strong>Gratis</strong>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 20px; padding-top: 20px; border-top: 2px solid #eaeaea; font-size: 1.3rem; color: #333;">
+                <strong>Total</strong>
+                <strong style="color: #e44d26;">$ <%= total %></strong>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

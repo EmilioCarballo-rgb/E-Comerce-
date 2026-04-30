@@ -1,24 +1,48 @@
-<%- include('../partials/header', { ocultarExtras: true }) %>
+<%- include('../partials/header') %>
 
-    <main class="login-main">
-        <section class="login-card">
-            <h2>¡Bienvenido a Mateando🧉!</h2>
-            <form action="/login" method="POST" class="login-form">
-                <div class="form-group">
-                    <label for="user" class="sr-only">Usuario</label>
-                    <input type="text" id="user" name="user" placeholder="Usuario" required>
-                </div>
-                <div class="form-group">
-                    <label for="password" class="sr-only">Contraseña</label>
-                    <input type="password" id="password" name="password" placeholder="Contraseña" required>
-                </div>
-                <button type="submit" class="btn-submit">Iniciar Sesión</button>
-            </form>
-            <div class="login-link">
-                <p>¿No tienes cuenta? <a href="/register">Registrate</a></p>
-                <p><a href="/" class="btn-back">Volver al inicio</a></p>
+<style>
+    body { background-color: #EAE3D2; margin: 0; }
+    .login-main { display: flex; justify-content: center; align-items: center; min-height: 85vh; padding: 40px 20px; font-family: Arial, Helvetica, sans-serif; }
+    .login-card { background-color: #83af31; padding: 40px; border-radius: 10px; box-shadow: -10px 20px 20px rgba(11, 80, 2, 0.973); width: 100%; max-width: 400px; text-align: center; }
+    .login-card h2 { font-family: Georgia, serif; font-size: 32px; margin-bottom: 30px; color: #EAE3D2; }
+    .login-form { display: flex; flex-direction: column; gap: 15px; }
+    .form-group { text-align: left; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+    .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; transition: border-color 0.3s; }
+    .form-group input:focus { border-color: #09D092; outline: none; }
+    .btn-submit { background-color: #ffffff; color: #333333; border: none; padding: 15px; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; transition: background-color 0.3s; }
+    .btn-submit:hover { background-color: #e6e6e6b7; }
+    .login-link { margin-top: 25px; font-size: 14px; color: #e2e2e2; }
+    .login-link a { color: #147700; text-decoration: underline; }
+    .btn-back { display: inline-block; background-color: #ffffff; color: #333333; border: none; padding: 10px 20px; border-radius: 5px; text-decoration: none !important; font-size: 16px; cursor: pointer; margin-top: 15px; border: 1px solid #cccccc; }
+    .btn-back:hover{ background-color: #e6e6e6b7; }
+
+    @media (max-width: 480px) {
+        .login-main { padding: 20px 15px; }
+        .login-card { padding: 30px 20px; box-shadow: 0px 10px 15px rgba(11, 80, 2, 0.5); }
+        .login-card h2 { font-size: 26px; margin-bottom: 20px; }
+    }
+</style>
+
+<main class="login-main">
+    <section class="login-card">
+        <h2>¡Bienvenido a Mateando🧉!</h2>
+        <form action="/login" method="POST" class="login-form">
+            <div class="form-group">
+                <label for="user" class="sr-only">Usuario</label>
+                <input type="text" id="user" name="user" placeholder="Usuario" required>
             </div>
-        </section>
-    </main>
+            <div class="form-group">
+                <label for="password" class="sr-only">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Contraseña" required>
+            </div>
+            <button type="submit" class="btn-submit">Iniciar Sesión</button>
+        </form>
+        <div class="login-link">
+            <p>¿No tienes cuenta? <a href="/register">Registrate</a></p>
+            <p><a href="/" class="btn-back">Volver al inicio</a></p>
+        </div>
+    </section>
+</main>
 
-    <%- include('../partials/footer') %>
+<%- include('../partials/footer') %>
