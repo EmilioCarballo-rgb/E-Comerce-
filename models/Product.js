@@ -120,4 +120,4 @@ class Product {
         return products.find(p => p.category === category);
     }
 }
-module.exports = Product;
+module.exports = products;

@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 
-// Definición de rutas
-router.get("/", productController.getIndex);
-router.get("/category/:categoriaId", productController.getByCategory);
-router.get("/products/:id", productController.getDetail);
+// Línea 7: Revisá que getIndex esté bien escrito y que el controlador esté bien importado
+router.get('/', productController.getIndex); 
 
 module.exports = router;

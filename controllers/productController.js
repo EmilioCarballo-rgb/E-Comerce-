@@ -1,24 +1,13 @@
-const Product = require ('../models/Product');
+// Importamos los datos (asegúrate de que la ruta y el nombre 'Product' sean correctos)
+const products = require('../models/Product'); 
 
 const productController = {
-    //Lista todos los productos  (home)
-    getIndex: (req, res) => {const allProducts = Product.findAll();
-        res.render ("pages/index", {products: allProducts});
-    },
-
-    //Detalle de un producto 
-    getDetail: (req, res) => {const product = Product.findById(req.params.id) 
-        if(product){
-            res.render("pages/products", {products:product});
-        } else {
-            res.status(404).send("Producto no encontrado")
-        }
-    },
-
-    //Filtrado por categoria 
-    getByCategory: (req, res) => {const filtered = Product.findByCategory (req.params.CategoriaId);
-        res.render("pages/index", {products: filtered});
+    // Esta es la función que busca tu archivo de rutas en la línea 7
+    getIndex: (req, res) => {
+        // Renderiza la vista 'index' pasando el array de productos
+        res.render("pages/index", { products: products });
     }
 };
 
+// CRUCIAL: Si no exportas el objeto, router.get('/', productController.getIndex) dará error
 module.exports = productController;
