@@ -1,39 +1,57 @@
-const Cart = require('../models/Cart');
-const Product = require('../models/Product');
-// Simulamos que el carrito y el usuario vienen de algún estado global o base de datos
-// En el futuro, esto vendrá de req.session o de un JWT
-const cartProducts = []; 
-const currentUser = null; 
+const products = require('../models/Product');
 
 const cartController = {
-    // Renderiza la vista principal del carrito
-    getCart: (req, res) => {
-        const total = Cart.calculateTotal(cartProducts);
-        res.render("pages/cart", { products: cartProducts, user: currentUser, total: total });
+    viewCart: (req, res) => {
+        const cart = req.session.cart; 
+        let total = 0;
+
+        const cartDetail = cart.map(item => {
+            const productData = products.find(p => p.id == item.productId);
+            const subtotal = productData.price * item.quantity;
+            total += subtotal;
+            return {
+                ...productData,
+                quantity: item.quantity,
+                subtotal: subtotal
+            };
+        });
+
+        res.render("pages/cart", { cart: cartDetail, total: total });
     },
 
-    // Agrega un producto
-    addItem: (req, res) => {
-        const productId = parseInt(req.params.id);
-        
-        const productoElegido = Product.findById(idProducto);
-        // const productoElegido = Product.findById(productId);
-        
-        cartProducts = Cart.addProduct(cartProducts, productoElegido);
-        
-        res.redirect("/");
+    add: (req, res) => {
+        const productId = req.params.id;
+        const cart = req.session.cart;
+        const itemIndex = cart.findIndex(item => item.productId == productId);
+
+        if (itemIndex !== -1) {
+            cart[itemIndex].quantity += 1;
+        } else {
+            cart.push({ productId: productId, quantity: 1 });
+        }
+        res.redirect('/cart');
     },
 
-    // Renderiza el Checkout
-    getCheckout: (req, res) => {
-        const total = Cart.calculateTotal(cartProducts);
-        res.render("pages/checkout", { user: currentUser, cart: cartProducts, total: total });
+    increase: (req, res) => {
+        const item = req.session.cart.find(i => i.productId == req.params.id);
+        if (item) item.quantity += 1;
+        res.redirect('/cart');
     },
-    
-    // ... aquí faltarían tus funciones de quitar y actualizar cantidad
 
-    updateQuantity: (req, res ) => {
-        const productId = parseInt(req.params.id);
+    decrease: (req, res) => {
+        const itemIndex = req.session.cart.findIndex(i => i.productId == req.params.id);
+        if (itemIndex !== -1) {
+            req.session.cart[itemIndex].quantity -= 1;
+            if (req.session.cart[itemIndex].quantity <= 0) {
+                req.session.cart.splice(itemIndex, 1);
+            }
+        }
+        res.redirect('/cart');
+    },
+
+    empty: (req, res) => {
+        req.session.cart = [];
+        res.redirect('/cart');
     }
 };
 

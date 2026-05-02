@@ -1,8 +1,7 @@
 <%- include('../partials/header') %>
 
 <style>
-    /* Usa exactamente los mismos estilos que login.ejs (los pego resumidos para ahorrarte espacio, copiá el bloque <style> entero del login acá arriba) */
-    body { background-color: #EAE3D2; margin: 0; }
+    /* ... tus estilos actuales ... */
     .register-main { display: flex; justify-content: center; align-items: center; min-height: 85vh; padding: 40px 20px; font-family: Arial, Helvetica, sans-serif; }
     .register-card { background-color: #83af31; padding: 40px; border-radius: 10px; box-shadow: -10px 20px 20px rgba(11, 80, 2, 0.973); width: 100%; max-width: 400px; text-align: center; }
     .register-card h2 { font-family: Georgia, serif; font-size: 32px; margin-bottom: 30px; color: #EAE3D2; }
@@ -12,41 +11,133 @@
     .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
     .form-group input:focus { border-color: #09D092; outline: none; }
     .btn-submit { background-color: #ffffff; color: #333333; border: none; padding: 15px; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; }
-    .btn-submit:hover { background-color: #e6e6e6b7; }
-    .login-link { margin-top: 25px; font-size: 14px; color: #e2e2e2; }
-    .login-link a { color: #147700; text-decoration: underline; }
-    .btn-back { display: inline-block; background-color: #ffffff; color: #333333; padding: 10px 20px; border-radius: 5px; text-decoration: none !important; font-size: 16px; margin-top: 15px; border: 1px solid #cccccc; }
-
-    @media (max-width: 480px) {
-        .register-main { padding: 20px 15px; }
-        .register-card { padding: 30px 20px; box-shadow: 0px 10px 15px rgba(11, 80, 2, 0.5); }
-        .register-card h2 { font-size: 26px; margin-bottom: 20px; }
-    }
+    
+    /* Estilo para mensajes de error */
+    .error-message { color: #8B0000; font-size: 12px; margin-top: 5px; display: none; font-weight: bold; }
+    input.invalid { border: 2px solid #8B0000; }
 </style>
 
 <main class="register-main">
     <section class="register-card">
         <h2>¡REGISTRATE!</h2>
-        <form action="/register" method="POST" class="register-form">
+        <!-- Agregamos un ID al form para manipularlo con JS -->
+        <form action="/register" method="POST" class="register-form" id="registerForm">
+            
+            <!-- Campo Nombre (Nuevo) -->
+            <div class="form-group">
+                <label for="nombre" class="sr-only">Nombre</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre">
+                <span id="error-nombre" class="error-message"></span>
+            </div>
+
+            <!-- Campo Apellido (Nuevo) -->
+            <div class="form-group">
+                <label for="apellido" class="sr-only">Apellido</label>
+                <input type="text" id="apellido" name="apellido" placeholder="Apellido">
+                <span id="error-apellido" class="error-message"></span>
+            </div>
+
             <div class="form-group">
                 <label for="email" class="sr-only">Email</label>
-                <input type="email" id="email" name="email" placeholder="Email" required>
+                <input type="email" id="email" name="email" placeholder="Email">
+                <span id="error-email" class="error-message"></span>
             </div>
+
             <div class="form-group">
                 <label for="password" class="sr-only">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="Contraseña" required>
+                <input type="password" id="password" name="password" placeholder="Contraseña">
+                <span id="error-password" class="error-message"></span>
             </div>
+
             <div class="form-group">
                 <label for="passwordConfirm" class="sr-only">Repita Contraseña</label>
-                <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Repita Contraseña" required>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Repita Contraseña">
+                <span id="error-passwordConfirm" class="error-message"></span>
             </div>
+
             <button type="submit" class="btn-submit">Crear Cuenta</button>
         </form>
+
         <div class="login-link">
             <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
             <p><a href="/" class="btn-back">Volver al inicio</a></p>
         </div>
     </section>
 </main>
+
+<script>
+    const form = document.getElementById('registerForm');
+    const siteName = "TuEcommerce"; // Cambia esto por el nombre de tu sitio
+
+    form.addEventListener('submit', function(e) {
+        let hasErrors = false;
+
+        // Captura de valores y limpieza de espacios (Trim)
+        const fields = {
+            nombre: document.getElementById('nombre'),
+            apellido: document.getElementById('apellido'),
+            email: document.getElementById('email'),
+            password: document.getElementById('password'),
+            confirm: document.getElementById('passwordConfirm')
+        };
+
+        const values = {
+            nombre: fields.nombre.value.trim(),
+            apellido: fields.apellido.value.trim(),
+            email: fields.email.value.trim(),
+            password: fields.password.value.trim(),
+            confirm: fields.confirm.value.trim()
+        };
+
+        // Función auxiliar para mostrar errores
+        const showError = (field, message) => {
+            const errorSpan = document.getElementById(`error-${field.id}`);
+            errorSpan.textContent = message;
+            errorSpan.style.display = 'block';
+            field.classList.add('invalid');
+            hasErrors = true;
+        };
+
+        // Resetear errores previos
+        document.querySelectorAll('.error-message').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('input').forEach(i => i.classList.remove('invalid'));
+
+        // VALIDACIONES
+        // 1. Campos obligatorios
+        if (!values.nombre) showError(fields.nombre, "El nombre es obligatorio.");
+        if (!values.apellido) showError(fields.apellido, "El apellido es obligatorio.");
+        
+        // 2. Email válido
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(values.email)) showError(fields.email, "Email no válido.");
+
+        // 3. Validación de Password (8 caracteres, letra, número, especial)
+        const passRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+        if (!passRegex.test(values.password)) {
+            showError(fields.password, "Mínimo 8 caracteres, una letra, un número y un carácter especial.");
+        }
+
+        // 4. Cadenas prohibidas
+        const forbidden = ["password", "1234", "qwerty", siteName.toLowerCase(), values.nombre.toLowerCase()];
+        if (forbidden.some(word => word !== "" && values.password.toLowerCase().includes(word))) {
+            showError(fields.password, "La contraseña es muy débil o contiene datos personales.");
+        }
+
+        // 5. Password != Email
+        if (values.password === values.email && values.password !== "") {
+            showError(fields.password, "La contraseña no puede ser igual al email.");
+        }
+
+        // 6. Confirmación de password
+        if (values.password !== values.confirm) {
+            showError(fields.confirm, "Las contraseñas no coinciden.");
+        }
+
+        // Bloqueo de envío si hay errores
+        if (hasErrors) {
+            e.preventDefault();
+        }
+    });
+</script>
 
 <%- include('../partials/footer') %>
