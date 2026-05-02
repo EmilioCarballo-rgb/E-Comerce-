@@ -4,6 +4,7 @@ const products = [
     title: "Mate", category: "mates",
     description: "Mate Imperial de Madera Mate artesanal trabajado en maderas seleccionadas, ideal para quienes buscan un sabor suave y un aroma rústico en cada cebada.", 
     price: 15000, 
+    stock: 0,
     image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRP1O25vTC92joON5LaHxuUuhXnVoL1VerBaO7Cb7J1Pf25_wInn3fbBqw02Bu_1-VRnudDjOUnM4eRJipnE-aj1YU2ZXOjjTlIr9sMM3uW9fQSVBMg8YiqSU0g1Nx0eoDSC1mDBg&usqp=CAc" 
   },
   { 

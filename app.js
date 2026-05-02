@@ -55,4 +55,17 @@ app.get("/login", (req, res) => { res.render("pages/login", {}) });
 app.post("/register", (req, res) => { res.redirect("/"); });
 app.post("/login", (req, res) => { res.redirect("/"); });
 
+app.use((req, res, next) => {
+    // no encontrado
+    res.status(404).render('pages/404'); 
+});
+
+app.use((err, req, res, next) => {
+    // Esto imprime el error feo y real en TU terminal (para que vos como programador lo puedas arreglar)
+    console.error(err.stack); 
+    
+    // Esto le manda al usuario la pantalla linda, sin filtrar información sensible (Validación OK)
+    res.status(500).render('pages/500'); 
+});
+
 app.listen(port, ()=> console.log("Servidor abierto en puerto " + port));
