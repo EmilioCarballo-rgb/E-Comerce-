@@ -1,59 +1,88 @@
+// models/Cart.js
+const Product = require('./Product');
 
 class Cart {
     /**
-     * Agrega un producto al carrito o incrementa su cantidad si ya existe.
-     * @param {Array} userCart - El carrito actual del usuario.
-     * @param {Object} product - El objeto del producto a agregar.
-     * @returns {Array} - El carrito actualizado.
+     * @param {Array} sessionCart - El carrito crudo de la sesión [{productId, quantity}]
+     * @returns {Array} - Carrito con datos completos del producto y subtotales
      */
-    static addProduct(userCart, product) {
-        // Clonamos el carrito para no mutar el objeto original directamente (buena práctica)
-        let updatedCart = [...userCart]; 
-        const existingProduct = updatedCart.find(p => p.id === product.id);
+    static getDetailedCart(sessionCart) {
+        if (!sessionCart || sessionCart.length === 0) return [];
 
-        if (existingProduct) {
-            existingProduct.quantity += 1;
-        } else {
-            updatedCart.push({ ...product, quantity: 1 });
-        }
+        return sessionCart.map(item => {
+            const productData = Product.findById(item.productId);
+            
+            // Prevención de fallos: si el producto fue borrado del catálogo
+            if (!productData) return null; 
 
-        return updatedCart;
+            const subtotal = productData.price * item.quantity;
+            return {
+                ...productData, // Spread operator para copiar nombre, precio, etc.
+                quantity: item.quantity,
+                subtotal: subtotal
+            };
+        }).filter(item => item !== null); // Filtramos los productos nulos
     }
 
     /**
-     * Actualiza la cantidad de un producto (suma o resta).
+     * @param {Array} sessionCart - El carrito crudo
+     * @returns {Number} - El total de la compra
      */
-    static updateQuantity(userCart, productId, action) {
-        let updatedCart = [...userCart];
-        const product = updatedCart.find(p => p.id === parseInt(productId));
-        
-        if (product) {
-            if (action === 'sumar') {
-                product.quantity += 1;
-            } else if (action === 'restar' && product.quantity > 1) {
-                product.quantity -= 1;
+    static calculateTotal(sessionCart) {
+        const cartDetails = this.getDetailedCart(sessionCart);
+        let total = 0;
+        cartDetails.forEach(item => {
+            total += item.subtotal;
+        });
+        return total;
+    }
+
+    /**
+     * @param {Array} sessionCart - El carrito crudo
+     * @param {String|Number} productId - El ID del producto a agregar
+     * @returns {Array} - El nuevo estado del carrito
+     */
+    static addItem(sessionCart, productId) {
+        let cart = sessionCart ? [...sessionCart] : [];
+        const itemIndex = cart.findIndex(item => item.productId == productId);
+
+        if (itemIndex !== -1) {
+            cart[itemIndex].quantity += 1;
+        } else {
+            cart.push({ productId: productId, quantity: 1 });
+        }
+        return cart;
+    }
+
+    /**
+     * @param {Array} sessionCart - El carrito crudo
+     * @param {String|Number} productId - El ID del producto a incrementar
+     * @returns {Array} - El nuevo estado del carrito
+     */
+    static increaseItem(sessionCart, productId) {
+        let cart = sessionCart ? [...sessionCart] : [];
+        const item = cart.find(i => i.productId == productId);
+        if (item) item.quantity += 1;
+        return cart;
+    }
+
+    /**
+     * @param {Array} sessionCart - El carrito crudo
+     * @param {String|Number} productId - El ID del producto a decrementar
+     * @returns {Array} - El nuevo estado del carrito
+     */
+    static decreaseItem(sessionCart, productId) {
+        let cart = sessionCart ? [...sessionCart] : [];
+        const itemIndex = cart.findIndex(i => i.productId == productId);
+
+        if (itemIndex !== -1) {
+            cart[itemIndex].quantity -= 1;
+            // Si la cantidad llega a 0, eliminamos el producto
+            if (cart[itemIndex].quantity <= 0) {
+                cart.splice(itemIndex, 1);
             }
         }
-        return updatedCart;
-    }
-
-    /**
-     * Elimina un producto por completo del carrito.
-     */
-    static removeProduct(userCart, productId) {
-        return userCart.filter(p => p.id !== parseInt(productId));
-    }
-
-    /**
-     * Calcula el valor total del carrito.
-     */
-    static calculateTotal(userCart) {
-        let total = 0;
-        for (let item of userCart) {
-            // Asumimos que el Product Model ya nos entrega números limpios, no strings con "$"
-            total += (item.price * item.quantity);
-        }
-        return total;
+        return cart;
     }
 }
 

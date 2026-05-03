@@ -1,19 +1,19 @@
+// routes/cartRoutes.js
 const express = require('express');
 const router = express.Router();
-// Importamos el controlador (lo crearemos en el siguiente paso)
 const cartController = require('../controllers/cartController');
 
-// Escenario 2: Ver el carrito
+// Visualización
 router.get('/', cartController.viewCart);
+router.get('/checkout', cartController.renderCheckout);
 
-// Escenario 1: Agregar producto
-router.post('/add/:id', cartController.add);
+// Acciones de modificación (Idealmente usaríamos POST/PUT, pero mantenemos GET por compatibilidad con tu estructura de links <a> actual)
+router.get('/add/:id', cartController.add);
+router.get('/increase/:id', cartController.increase);
+router.get('/decrease/:id', cartController.decrease);
+router.get('/empty', cartController.empty);
 
-// Escenario 3: Aumentar y disminuir cantidades
-router.post('/increase/:id', cartController.increase);
-router.post('/decrease/:id', cartController.decrease);
-
-// Escenario 4: Vaciar carrito
-router.post('/empty', cartController.empty);
+// Procesamiento de formulario (Este DEBE ser POST)
+router.post('/procesar-pago', cartController.procesarPago);
 
 module.exports = router;

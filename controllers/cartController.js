@@ -1,57 +1,73 @@
-const products = require('../models/Product');
+// controllers/cartController.js
+const Cart = require('../models/Cart');
 
 const cartController = {
+    // Renderiza la vista principal del carrito
     viewCart: (req, res) => {
-        const cart = req.session.cart; 
-        let total = 0;
+        const sessionCart = req.session.cart || []; 
 
-        const cartDetail = cart.map(item => {
-            const productData = products.find(p => p.id == item.productId);
-            const subtotal = productData.price * item.quantity;
-            total += subtotal;
-            return {
-                ...productData,
-                quantity: item.quantity,
-                subtotal: subtotal
-            };
-        });
+        const cartDetails = Cart.getDetailedCart(sessionCart);
+        const total = Cart.calculateTotal(sessionCart);
 
-        res.render("pages/cart", { cart: cartDetail, total: total });
+        res.render("pages/cart", { cart: cartDetails, total: total });
     },
 
+    // Agrega un producto al carrito
     add: (req, res) => {
         const productId = req.params.id;
-        const cart = req.session.cart;
-        const itemIndex = cart.findIndex(item => item.productId == productId);
-
-        if (itemIndex !== -1) {
-            cart[itemIndex].quantity += 1;
-        } else {
-            cart.push({ productId: productId, quantity: 1 });
-        }
+        const currentCart = req.session.cart || [];
+        
+        // Delegación al Modelo y actualización de sesión
+        req.session.cart = Cart.addItem(currentCart, productId);
+        
         res.redirect('/cart');
     },
 
+    // Aumenta la cantidad de un producto (+1)
     increase: (req, res) => {
-        const item = req.session.cart.find(i => i.productId == req.params.id);
-        if (item) item.quantity += 1;
+        const productId = req.params.id;
+        const currentCart = req.session.cart || [];
+        
+        req.session.cart = Cart.increaseItem(currentCart, productId);
+        
         res.redirect('/cart');
     },
 
+    // Disminuye la cantidad de un producto (-1)
     decrease: (req, res) => {
-        const itemIndex = req.session.cart.findIndex(i => i.productId == req.params.id);
-        if (itemIndex !== -1) {
-            req.session.cart[itemIndex].quantity -= 1;
-            if (req.session.cart[itemIndex].quantity <= 0) {
-                req.session.cart.splice(itemIndex, 1);
-            }
-        }
+        const productId = req.params.id;
+        const currentCart = req.session.cart || [];
+        
+        req.session.cart = Cart.decreaseItem(currentCart, productId);
+        
         res.redirect('/cart');
     },
 
+    // Vacía el carrito por completo
     empty: (req, res) => {
         req.session.cart = [];
         res.redirect('/cart');
+    },
+
+    // Renderiza la vista de Checkout
+    renderCheckout: (req, res) => {
+        const sessionCart = req.session.cart || [];
+        
+        const total = Cart.calculateTotal(sessionCart);
+            
+        res.render('pages/checkout', { total: total });
+    },
+
+    // Procesa el pago final
+    procesarPago: (req, res) => {
+        const { nombreCompleto, email, direccion } = req.body;
+
+        // Simulamos el procesamiento del pago...
+        console.log(`Procesando pedido para: ${nombreCompleto}`);
+        
+        // Vaciamos el carrito tras la compra exitosa
+        req.session.cart = [];
+        res.send(`¡Pago exitoso! Factura enviada a ${email}`);
     }
 };
 
