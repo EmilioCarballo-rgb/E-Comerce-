@@ -20,26 +20,37 @@
 <main class="register-main">
     <section class="register-card">
         <h2>¡REGISTRATE!</h2>
+
+        <% if (locals.errores && errores.length > 0) { %>
+            <div style="background-color: #ffcccc; color: #cc0000; padding: 15px; margin-bottom: 20px; border: 1px solid #cc0000; border-radius: 5px; text-align: left;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    <% errores.forEach(error => { %>
+                        <li><%= error %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% } %>
+
         <!-- Agregamos un ID al form para manipularlo con JS -->
         <form action="/register" method="POST" class="register-form" id="registerForm">
             
             <!-- Campo Nombre (Nuevo) -->
             <div class="form-group">
                 <label for="nombre" class="sr-only">Nombre</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Nombre">
+                <input type="text" id="nombre" name="nombre" value= "<%= locals.oldData ? oldData.apellido : '' %>" placeholder="Nombre">
                 <span id="error-nombre" class="error-message"></span>
             </div>
 
             <!-- Campo Apellido (Nuevo) -->
             <div class="form-group">
                 <label for="apellido" class="sr-only">Apellido</label>
-                <input type="text" id="apellido" name="apellido" placeholder="Apellido">
+                <input type="text" id="apellido" name="apellido" value= "<%= locals.oldData ? oldData.apellido : '' %>" placeholder="Apellido">
                 <span id="error-apellido" class="error-message"></span>
             </div>
 
             <div class="form-group">
                 <label for="email" class="sr-only">Email</label>
-                <input type="email" id="email" name="email" placeholder="Email">
+                <input type="email" id="email" name="email" value= "<%= locals.oldData ? oldData.email : '' %>"placeholder="Email">
                 <span id="error-email" class="error-message"></span>
             </div>
 
@@ -67,7 +78,7 @@
 
 <script>
     const form = document.getElementById('registerForm');
-    const siteName = "TuEcommerce"; // Cambia esto por el nombre de tu sitio
+    const siteName = "Mateando"; // Cambia esto por el nombre de tu sitio
 
     form.addEventListener('submit', function(e) {
         let hasErrors = false;
