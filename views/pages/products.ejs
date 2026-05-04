@@ -1,25 +1,24 @@
 <%- include('../partials/header') %>
 
-<main class="product-detail-container">
-    <!-- Sección de Imagen y Descripción -->
-    <section class="product-header">
-        <img src="<%= products.image %>" alt="<%= products.title %>" class="detail-img">
+<main class="detalle-contenedor">
+    
+    <div class="detalle-imagen">
+        <img src="<%= products.image%>" alt="<%= products.title %>">
+    </div>
+
+    <div class="detalle-info">
+        <h2><%= products.title %></h2>
+        <h3 class="detalle-precio"> <%= products.price %></h3>
         
-        <div class="detail-info">
-            <h1><%= products.title %></h1>
-            <p class="detail-category">Categoría: <%= products.category %></p>
-            <p class="detail-price">$<%= products.price %></p>
-            
-            <!-- MODIFICACIÓN CLAVE: Formulario POST para el detalle -->
-            <form action="/cart/add/<%= products.id %>" method="POST">
-                <button type="submit" class="btn-principal">
-                    Añadir al carrito 🧉
-                </button>
-            </form>
-            
-            <p class="detail-description"><%= products.description %></p>
-        </div>
-    </section>
+        <p><%= products.description%></p>
+
+        <a href="/agregar-al-carrito/<%= products.id %>" class="detalle-link-carrito">
+            <button class="detalle-btn-carrito">
+                Agregar al carrito
+            </button>
+        </a>
+    </div>
+
 </main>
 
 <%- include('../partials/footer') %>
