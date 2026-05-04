@@ -7,6 +7,8 @@ const productRoutes = require ('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const userRoutes = require('./routes/userRoutes');
 
+app.use(express.static('public'));
+
 app.set ("view engine", "ejs");
 
 // --- MIDDLEWARES DE TRADUCCIÓN ---
