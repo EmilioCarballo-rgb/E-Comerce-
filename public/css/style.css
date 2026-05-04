@@ -1030,3 +1030,67 @@ body {
     }
 }
 
+/* ========================================= */
+/* - CHECKOUT TEMPORAL (STORY 5)- */
+
+.checkout-temporal-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 20px;
+}
+
+.checkout-temporal-box {
+    text-align: center;
+    max-width: 700px;
+}
+
+.checkout-temporal-title {
+    font-size: 3rem;
+    color: #83af31;
+    font-family: Georgia, serif;
+    margin-bottom: 20px;
+}
+
+.checkout-temporal-subtitle {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+.checkout-temporal-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.btn-checkout-temp {
+    padding: 12px 30px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid #3e444e;
+    transition: 0.3s;
+}
+
+.btn-primary-temp {
+    background-color: #3e444e;
+    color: white;
+}
+
+.btn-secondary-temp {
+    background-color: #3e444e ;
+    color: white;
+}
+
+.btn-secondary-temp:hover {
+    background-color: #92969c;
+    color: white;
+}
+
+.btn-primary-temp:hover {
+    background-color: #92969c;
+    color: white;
+}
