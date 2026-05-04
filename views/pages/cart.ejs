@@ -1,65 +1,65 @@
 <%- include('../partials/header') %>
-<main class="cart-main">
-    <a href="/" class="btn-volver">Volver al inicio</a>
-    <h2 class="cart-title">Productos en tu Carrito</h2>
+    <main class="cart-main">
+        <a href="/" class="btn-volver">Volver al inicio</a>
+        <h2 class="cart-title">Productos en tu Carrito</h2>
 
-    <div class="cart-container">
-        <!-- ESCENARIO 6: Manejo de carrito vacío -->
-        <% if (cart.length > 0) { %>
-            <% for (const item of cart) { %>
-                <article class="item-carrito">
-                    <img src="<%= item.image %>" alt="<%= item.title %>" class="cart-img">
-                    
-                    <div class="cart-info">
-                        <h3><%= item.title %></h3>
-                    </div>
+        <div class="cart-container">
+            <% if (cart.length> 0) { %>
+                <% for (const item of cart) { %>
+                    <article class="item-carrito">
+                        <img src="<%= item.image %>" alt="<%= item.title %>" class="cart-img">
 
-                    <div class="cart-controls">
-                        <!-- Botón Quitar (reutilizamos decrease para llegar a 0) -->
-                        <form action="/cart/decrease/<%= item.id %>" method="POST">
-                            <button type="submit" class="btn-quitar">Quitar</button>
-                        </form>
-
-                        <div class="cart-quantity-box">
-                            <!-- ESCENARIO 3: Aumentar o disminuir cantidades mediante POST -->
-                            <form action="/cart/decrease/<%= item.id %>" method="POST">
-                                <button type="submit" class="btn-menos"> - </button>
-                            </form>
-                            
-                            <span class="cantidad"><%= item.quantity %></span> 
-                            
-                            <form action="/cart/increase/<%= item.id %>" method="POST">
-                                <button type="submit" class="btn-mas"> + </button>
-                            </form>
+                        <div class="cart-info">
+                            <h3>
+                                <%= item.title %>
+                            </h3>
                         </div>
 
-                        <p class="precio-subtotal">$<%= item.subtotal %></p>
-                    </div>
-                </article>
-            <% } %>
-        <% } else { %>
-            <div style="text-align: center; width: 100%;">
-                <p>Tu carrito está vacío actualmente.</p>
-                <a href="/" class="btn-volver">Ir a ver productos</a>
-            </div>
-        <% } %>
-    </div>
+                        <div class="cart-controls">
+                            <a href="/cart/decrease/<%= item.id %>">
+                                <button type="button" class="btn-quitar">Quitar</button>
+                            </a>
 
-    <% if (cart.length > 0) { %>
-        <div class="cart-summary">
-            <!-- ESCENARIO 5: Total general calculado en el controlador -->
-            <h3>Total a Pagar: <span id="gran-total">$<%= total %></span></h3>
-            
-            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
-                <a href="/checkout"><button class="btn-pagar">Ir a Pagar</button></a>
-                
-                <!-- ESCENARIO 4: Vaciar el carrito -->
-                <form action="/cart/empty" method="POST">
-                    <button type="submit" class="btn-vaciar">Vaciar carrito</button>
-                </form>
-            </div>
+                            <div class="cart-quantity-box">
+                                <a href="/cart/decrease/<%= item.id %>">
+                                    <button type="button" class="btn-menos"> - </button>
+                                </a>
+
+                                <span class="cantidad">
+                                    <%= item.quantity %>
+                                </span>
+
+                                <!-- Aumentar cantidad -->
+                                <a href="/cart/increase/<%= item.id %>">
+                                    <button type="button" class="btn-mas"> + </button>
+                                </a>
+                            </div>
+
+                            <p class="precio-subtotal">$<%= item.subtotal %>
+                            </p>
+                        </div>
+                    </article>
+                    <% } %>
+                        <% } else { %>
+                            <div style="text-align: center; width: 100%;">
+                                <p>Tu carrito está vacío actualmente.</p>
+                                <a href="/" class="btn-volver">Ir a ver productos</a>
+                            </div>
+                            <% } %>
         </div>
-    <% } %>
-</main>
 
-<%- include('../partials/footer') %>
+        <% if (cart.length> 0) { %>
+            <div class="cart-summary">
+                <h3>Total a Pagar: <span id="gran-total">$<%= total %></span></h3>
+
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+                    <a href="/cart/checkout"><button class="btn-pagar">Ir a Pagar</button></a>
+                    <a href="/cart/empty">
+                        <button type="button" class="btn-vaciar">Vaciar carrito</button>
+                    </a>
+                </div>
+            </div>
+            <% } %>
+    </main>
+
+    <%- include('../partials/footer') %>

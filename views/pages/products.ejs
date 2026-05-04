@@ -1,24 +1,30 @@
 <%- include('../partials/header') %>
 
-<main class="detalle-contenedor">
-    
-    <div class="detalle-imagen">
-        <img src="<%= products.image%>" alt="<%= products.title %>">
-    </div>
+    <main class="detalle-contenedor">
 
-    <div class="detalle-info">
-        <h2><%= products.title %></h2>
-        <h3 class="detalle-precio"> <%= products.price %></h3>
-        
-        <p><%= products.description%></p>
+        <div class="detalle-imagen">
+            <img src="<%= products.image%>" alt="<%= products.title %>">
+        </div>
 
-        <a href="/agregar-al-carrito/<%= products.id %>" class="detalle-link-carrito">
-            <button class="detalle-btn-carrito">
-                Agregar al carrito
-            </button>
-        </a>
-    </div>
+        <div class="detalle-info">
+            <h2>
+                <%= products.title %>
+            </h2>
+            <h3 class="detalle-precio">
+                <%= products.price %>
+            </h3>
 
-</main>
+            <p>
+                <%= products.description%>
+            </p>
 
-<%- include('../partials/footer') %>
+            <a href="/cart/add/<%= products.id %>" class="detalle-link-carrito">
+                <button class="detalle-btn-carrito">
+                    Agregar al carrito
+                </button>
+            </a>
+        </div>
+
+    </main>
+
+    <%- include('../partials/footer') %>

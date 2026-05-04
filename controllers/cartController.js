@@ -3,23 +3,38 @@ const Cart = require('../models/Cart');
 
 const cartController = {
     // Renderiza la vista principal del carrito
-    viewCart: (req, res) => {
-        const sessionCart = req.session.cart || []; 
-
+    /* viewCart: (req, res) => {
+      const sessionCart = req.session.cart || []; 
+ 
         const cartDetails = Cart.getDetailedCart(sessionCart);
-        const total = Cart.calculateTotal(sessionCart);
+         const total = Cart.calculateTotal(sessionCart);
+ 
+         res.render("pages/cart", { cart: cartDetails, total: total });
+ 
+         En controllers/cartController.js */
+    viewCart: (req, res) => {
+        const cartDetails = [{
+            id: 1,
+            title: "Mate de prueba",
+            price: 5000,
+            image: "/images/mate.jpg",
+            quantity: 1,
+            subtotal: 5000
+        }];
+        const total = 5000;
 
         res.render("pages/cart", { cart: cartDetails, total: total });
+
     },
 
     // Agrega un producto al carrito
     add: (req, res) => {
         const productId = req.params.id;
         const currentCart = req.session.cart || [];
-        
+
         // Delegación al Modelo y actualización de sesión
         req.session.cart = Cart.addItem(currentCart, productId);
-        
+
         res.redirect('/cart');
     },
 
@@ -27,9 +42,9 @@ const cartController = {
     increase: (req, res) => {
         const productId = req.params.id;
         const currentCart = req.session.cart || [];
-        
+
         req.session.cart = Cart.increaseItem(currentCart, productId);
-        
+
         res.redirect('/cart');
     },
 
@@ -37,9 +52,9 @@ const cartController = {
     decrease: (req, res) => {
         const productId = req.params.id;
         const currentCart = req.session.cart || [];
-        
+
         req.session.cart = Cart.decreaseItem(currentCart, productId);
-        
+
         res.redirect('/cart');
     },
 
@@ -51,11 +66,12 @@ const cartController = {
 
     // Renderiza la vista de Checkout
     renderCheckout: (req, res) => {
-        const sessionCart = req.session.cart || [];
-        
-        const total = Cart.calculateTotal(sessionCart);
-            
-        res.render('pages/checkout', { total: total });
+        /* const sessionCart = req.session.cart || [];
+         
+         const total = Cart.calculateTotal(sessionCart);
+         
+        res.render('pages/checkout', { total: total });*/
+        res.render('pages/checkout');
     },
 
     // Procesa el pago final
@@ -64,7 +80,7 @@ const cartController = {
 
         // Simulamos el procesamiento del pago...
         console.log(`Procesando pedido para: ${nombreCompleto}`);
-        
+
         // Vaciamos el carrito tras la compra exitosa
         req.session.cart = [];
         res.send(`¡Pago exitoso! Factura enviada a ${email}`);

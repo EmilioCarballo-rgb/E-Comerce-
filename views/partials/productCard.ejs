@@ -8,8 +8,8 @@
         </div>
     </a>
     <div class="cart-card-actions">
-        <form action="/cart/add/<%= product.id %>" method="POST">
-            <button type="submit" class="btn-add-card">Agregar al carrito 🛒</button>
-        </form>
-    </div>
+    <a href="/cart/add/<%= product.id %>" class="btn-add-card" style="text-decoration: none; display: inline-block; text-align: center;">
+        Agregar al carrito 🛒
+    </a>
+</div>
 </article>

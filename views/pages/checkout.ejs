@@ -1,68 +1,21 @@
-<%- include('../partials/header') %>
+<%- include('../partials/header', { ocultarExtras: true }) %>
 
-<main class="checkout-main">
-    <div class="checkout-container">
+<main class="checkout-temporal-main">
+    <div class="checkout-temporal-box">
         
-        <!-- COLUMNA IZQUIERDA: FORMULARIO -->
-        <div class="checkout-box checkout-form-col">
-            <h2 class="checkout-title">Detalles de Facturación</h2>
-            
-            <form action="/procesar-pago" method="POST">
-                
-                <h3 class="checkout-subtitle">1. Datos Personales</h3>
-                <div class="checkout-row">
-                    <div class="checkout-col">
-                        <label class="checkout-label">Nombre completo</label>
-                        <input type="text" class="checkout-input" placeholder="Ej: Franco">
-                    </div>
-                    <div class="checkout-col">
-                        <label class="checkout-label">Correo electrónico</label>
-                        <input type="email" class="checkout-input" placeholder="correo@ejemplo.com">
-                    </div>
-                </div>
-
-                <h3 class="checkout-subtitle mt-10">2. Envío</h3>
-                <label class="checkout-label">Dirección de entrega</label>
-                <input type="text" class="checkout-input" placeholder="Calle y número">
-
-                <h3 class="checkout-subtitle mt-10">3. Pago Seguro 🔒</h3>
-                <label class="checkout-label">Número de Tarjeta</label>
-                <input type="text" class="checkout-input" placeholder="0000 0000 0000 0000">
-                
-                <div class="checkout-row">
-                    <div class="checkout-col">
-                        <label class="checkout-label">Vencimiento</label>
-                        <input type="text" class="checkout-input no-mb" placeholder="MM/AA">
-                    </div>
-                    <div class="checkout-col">
-                        <label class="checkout-label">Cód. Seguridad (CVC)</label>
-                        <input type="text" class="checkout-input no-mb" placeholder="123">
-                    </div>
-                </div>
-
-                <button type="submit" class="checkout-btn">
-                    Confirmar Pago
-                </button>
-            </form>
-        </div>
-
-        <!-- COLUMNA DERECHA: RESUMEN -->
-        <div class="checkout-box checkout-summary-col">
-            <h3 class="checkout-title">Resumen</h3>
-            
-            <div class="checkout-summary-item">
-                <span>Subtotal</span>
-                <strong>$ <%= total %></strong>
-            </div>
-            <div class="checkout-summary-item">
-                <span>Envío</span>
-                <strong>Gratis</strong>
-            </div>
-            
-            <div class="checkout-summary-total">
-                <strong>Total</strong>
-                <strong class="checkout-total-price">$ <%= total %></strong>
-            </div>
+        <h2 class="checkout-temporal-title">¡Ups! 🚧</h2>
+        
+        <h3 class="checkout-temporal-subtitle">
+            Checkout disponible en el próximo sprint
+        </h3>
+        
+        <div class="checkout-temporal-buttons">
+            <a href="/cart" class="btn-checkout-temp btn-primary-temp">
+                Volver al carrito
+            </a>
+            <a href="/" class="btn-checkout-temp btn-secondary-temp">
+                Volver al inicio
+            </a>
         </div>
 
     </div>
