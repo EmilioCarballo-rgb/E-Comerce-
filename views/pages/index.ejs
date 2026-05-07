@@ -3,11 +3,25 @@
 
 <main class="home-main">
     <h2 class="home-title">¡Bienvenido a Mateando🧉!</h2>
+
+    <section class="suggested-section" style="margin-bottom: 50px;">
+        <h3 class="home-title" style="font-size: 1.5rem; color: #666;">Te puede interesar ✨</h3>
+        <div class="product-grid">
+            <% suggested.forEach(product => { %>
+                <%- include('../partials/productCard', { product: product }) %>
+            <% }) %>
+        </div>
+    </section>
+
+    <hr style="margin: 40px 5%; border: 0.5px solid #ccc; opacity: 0.3;">
+
+    <h3 class="home-title" style="font-size: 1.5rem; color: #666;">Nuestro Catálogo</h3>
     <div class="product-grid">
         <% for (const product of products) { %>
             <%- include('../partials/productCard', { product: product }) %>
         <% } %>
     </div>
+
     <section class="promo-section">
         <div class="promo-text-box">
             <h2 class="promo-title">Llevate el <span class="promo-highlight">Kit Matero Premium</span></h2>
@@ -18,6 +32,7 @@
             <img src="https://www.belloexport.com.ar/wp-content/uploads/2018/08/P07908.jpg" alt="Promoción Kit Matero" class="promo-img">
         </div>
     </section>
+
     <section class="promo-section">
         <div class="promo-text-box">
             <h2 class="promo-title">¡Nuevo Ingreso! <span class="promo-highlight">Mate Imperial</span></h2>

@@ -1,15 +1,21 @@
 <article class="cart-card">
     <a href="/products/<%= product.id %>" class="cart-card-link">
-        <img src="<%= product.image %>" alt="<%= product.title %>" class="cart-card-img">
+        <img src="<%= product.image ? product.image : 'https://via.placeholder.com/250?text=Mate+Sin+Foto' %>" 
+             alt="<%= product.title %>" 
+             class="cart-card-img">
+        
         <div class="cart-card-body">
             <h3 class="cart-card-title"><%= product.title %></h3>
             <p class="cart-card-price">$<%= product.price %></p>
             <p class="cart-card-desc"><%= product.description %></p>
         </div>
     </a>
+
     <div class="cart-card-actions">
-    <a href="/cart/add/<%= product.id %>" class="btn-add-card" style="text-decoration: none; display: inline-block; text-align: center;">
-        Agregar al carrito 🛒
-    </a>
-</div>
+        <form action="/cart/add/<%= product.id %>" method="POST" style="margin: 0;">
+            <button type="submit" class="btn-add-card" style="text-decoration: none; display: inline-block; text-align: center; width: 100%; border: none; cursor: pointer;">
+                Agregar al carrito 🛒
+            </button>
+        </form>
+    </div>
 </article>

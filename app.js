@@ -13,7 +13,7 @@ app.set ("view engine", "ejs");
 
 // --- MIDDLEWARES DE TRADUCCIÓN ---
 // Permite a Express decodificar los formularios HTML
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 // Permite a Express decodificar peticiones en formato JSON
 app.use(express.json());
 

@@ -2,18 +2,30 @@
 const Product = require('../models/Product'); 
 
 const productController = {
-    // Esta es la función que busca tu archivo de rutas en la línea 7
+    
     getIndex: (req, res) => {
-        // Renderiza la vista 'index' pasando el array de productos
-        res.render("pages/index", { products: Product});
+        // 1. Creamos los productos sugeridos (Bonus: 5 aleatorios)
+        const sugeridos = [...Product].sort(() => 0.5 - Math.random()).slice(0, 5);
+
+        // 2. Renderizamos mandando AMBOS listados
+        res.render("pages/index", { 
+            products: Product, 
+            suggested: sugeridos 
+        });
     },
 
     getCategory: (req, res) => {
-        const categoriaElegida = req.params.categoriaId;
-        const productosFiltrados = Product.filter(p => p.category === categoriaElegida);
-        
-        res.render("pages/index", { products: productosFiltrados });
-    },
+          const categoriaElegida = req.params.categoriaId;
+          const productosFiltrados = Product.filter(p => p.category === categoriaElegida);
+    
+             // Definimos sugeridos UNA SOLA VEZ
+          const sugeridos = [...Product].sort(() => 0.5 - Math.random()).slice(0, 5);
+
+             res.render("pages/index", { 
+                 products: productosFiltrados, 
+                 suggested: sugeridos // Usamos la variable de arriba
+    });
+},
 
     getProductById: (req, res) => {
         const idSeleccionado = parseInt(req.params.id); 

@@ -1,32 +1,31 @@
 // models/Cart.js
-const Product = require('./Product');
+const Product = require('./Product'); 
 
 class Cart {
     /**
-     * @param {Array} sessionCart - El carrito crudo de la sesión [{productId, quantity}]
-     * @returns {Array} - Carrito con datos completos del producto y subtotales
+     * Une los IDs de la sesión con los datos reales de los productos
      */
     static getDetailedCart(sessionCart) {
         if (!sessionCart || sessionCart.length === 0) return [];
 
         return sessionCart.map(item => {
-            const productData = Product.findById(item.productId);
-            
-            // Prevención de fallos: si el producto fue borrado del catálogo
-            if (!productData) return null; 
+            // Buscamos los datos completos del producto en el array de Productos
+            const productData = Product.find(p => p.id == item.productId);
+
+            if (!productData) return null;
 
             const subtotal = productData.price * item.quantity;
+            
             return {
-                ...productData, // Spread operator para copiar nombre, precio, etc.
+                ...productData, // Copia nombre, precio, imagen, etc.
                 quantity: item.quantity,
                 subtotal: subtotal
             };
-        }).filter(item => item !== null); // Filtramos los productos nulos
+        }).filter(item => item !== null); // Limpiamos si algún producto no se encontró
     }
 
     /**
-     * @param {Array} sessionCart - El carrito crudo
-     * @returns {Number} - El total de la compra
+     * Calcula el total general de la compra
      */
     static calculateTotal(sessionCart) {
         const cartDetails = this.getDetailedCart(sessionCart);
@@ -38,9 +37,7 @@ class Cart {
     }
 
     /**
-     * @param {Array} sessionCart - El carrito crudo
-     * @param {String|Number} productId - El ID del producto a agregar
-     * @returns {Array} - El nuevo estado del carrito
+     * Agrega un producto o aumenta su cantidad si ya existe
      */
     static addItem(sessionCart, productId) {
         let cart = sessionCart ? [...sessionCart] : [];
@@ -55,9 +52,7 @@ class Cart {
     }
 
     /**
-     * @param {Array} sessionCart - El carrito crudo
-     * @param {String|Number} productId - El ID del producto a incrementar
-     * @returns {Array} - El nuevo estado del carrito
+     * Incrementa cantidad (+1)
      */
     static increaseItem(sessionCart, productId) {
         let cart = sessionCart ? [...sessionCart] : [];
@@ -67,9 +62,7 @@ class Cart {
     }
 
     /**
-     * @param {Array} sessionCart - El carrito crudo
-     * @param {String|Number} productId - El ID del producto a decrementar
-     * @returns {Array} - El nuevo estado del carrito
+     * Decrementa cantidad (-1) o elimina si llega a 0
      */
     static decreaseItem(sessionCart, productId) {
         let cart = sessionCart ? [...sessionCart] : [];
@@ -77,13 +70,12 @@ class Cart {
 
         if (itemIndex !== -1) {
             cart[itemIndex].quantity -= 1;
-            // Si la cantidad llega a 0, eliminamos el producto
             if (cart[itemIndex].quantity <= 0) {
                 cart.splice(itemIndex, 1);
             }
         }
         return cart;
     }
-}
+} // <--- UNA SOLA LLAVE para cerrar la clase al final de todo
 
 module.exports = Cart;
