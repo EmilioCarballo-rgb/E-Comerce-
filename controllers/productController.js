@@ -22,16 +22,20 @@ const productController = {
         });
     },
 
-    // VISTA POR CATEGORÍA
+    // VISTA POR CATEGORÍA (story #10)
     getCategory: (req, res) => {
-        const categoriaElegida = req.params.categoriaId;
-        const productosFiltrados = Product.findByCategory(categoriaElegida);
-        res.render("pages/index", { 
-            products: productosFiltrados, 
-            mostWanted: [] 
+        // Capturamos el nombre de la categoría de la URL
+        const categoryName = req.params.category;
+        
+        // Filtramos usando el método de tu clase Product
+        const filteredProducts = Product.findByCategory(categoryName);
+        
+        // Renderizamos la nueva vista 'category.ejs'
+        res.render("pages/category", { 
+            products: filteredProducts, 
+            categoryName: categoryName 
         });
     },
-
     // VISTA DETALLE + RELACIONADOS 
     getProductById: (req, res) => {
         const idSeleccionado = req.params.id; 
