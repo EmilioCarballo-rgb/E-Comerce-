@@ -2,12 +2,25 @@
 <%- include('../partials/categoryBar') %>
 
 <main class="home-main">
-    <h2 class="home-title">¡Bienvenido a Mateando🧉!</h2>
+    <h2 class="home-title" style="text-align: center; margin-top: 20px;">¡Bienvenido a Mateando🧉!</h2>
+
+    <% if (mostWanted && mostWanted.length > 0) { %>
+        <section class="most-wanted-section" style="padding: 20px; background-color: #f9f9f9; border-radius: 15px; margin: 20px 0;">
+            <h2 style="margin-left: 10px;">Los más pedidos 🔥</h2>
+            <div class="product-grid"> <% mostWanted.forEach(product => { %>
+                    <%- include('../partials/productCard', { product: product }) %>
+                <% }) %>
+            </div>
+        </section>
+    <% } %>
+
+    <h2 style="margin-left: 30px;">Nuestro Catálogo</h2>
     <div class="product-grid">
         <% for (const product of products) { %>
             <%- include('../partials/productCard', { product: product }) %>
         <% } %>
     </div>
+
     <section class="promo-section">
         <div class="promo-text-box">
             <h2 class="promo-title">Llevate el <span class="promo-highlight">Kit Matero Premium</span></h2>
@@ -18,16 +31,7 @@
             <img src="https://www.belloexport.com.ar/wp-content/uploads/2018/08/P07908.jpg" alt="Promoción Kit Matero" class="promo-img">
         </div>
     </section>
-    <section class="promo-section">
-        <div class="promo-text-box">
-            <h2 class="promo-title">¡Nuevo Ingreso! <span class="promo-highlight">Mate Imperial</span></h2>
-            <p class="promo-desc">Conocé nuestro nuevo Mate Imperial, diseñado para los materos más exigentes. Calabaza seleccionada, cuero de primera y detalles únicos en alpaca.</p>
-            <a href="/products/5" class="promo-link"><button class="promo-btn">Ver Nuevo Ingreso</button></a>
-        </div>
-        <div class="promo-img-box">
-            <img src="https://imgs.search.brave.com/sJi2V9pDBgoI3CJVf0BsJsPW8HCMRd0VAY96Oxe8Av0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9hY2Ru/LXVzLm1pdGllbmRh/bnViZS5jb20vc3Rv/cmVzLzAwNS82NzYv/MDMzL3Byb2R1Y3Rz/L2ltcGVyaWFsLXBl/cXVlbm8tZjdjOTQw/ZmU4ZWU4NDAwNzNi/MTczNzIxOTYwNzI5/MjQtMjQwLTAuanBl/Zw" alt="Mate Imperial" class="promo-img">
-        </div>
-    </section>
-</main>
+
+    </main>
 
 <%- include('../partials/footer') %>
