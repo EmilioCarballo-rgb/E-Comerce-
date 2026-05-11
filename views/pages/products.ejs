@@ -1,50 +1,58 @@
 <%- include('../partials/header') %>
 
-<main class="detalle-contenedor" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
-
-    <section style="display: flex; gap: 40px; margin-bottom: 50px;">
-        <div class="detalle-imagen" style="flex: 1;">
-            <img src="<%= products.image ? products.image : '/images/default-mate.jpg' %>" 
-                 alt="<%= products.title %>" 
-                 style="width: 100%; border-radius: 15px;">
+<main style="padding: 40px 10%; min-height: 80vh; font-family: sans-serif;">
+    <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: start;">
+        
+        <div style="flex: 1; min-width: 300px;">
+            <% 
+                // Bonus: Imagen de fallback si no existe
+                let imagePath = product.image ? product.image : 'https://via.placeholder.com/500?text=Mate+No+Disponible';
+            %>
+            <img src="<%= imagePath %>" alt="<%= product.title %>" style="width: 100%; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
         </div>
 
-        <div class="detalle-info" style="flex: 1;">
-            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">
-                <%= products.title %>
-            </h2>
-            <h3 class="detalle-precio" style="color: #27ae60; font-size: 2rem; margin-bottom: 20px;">
-                $<%= products.price %>
-            </h3>
-
-            <p style="font-size: 1.1rem; line-height: 1.6; color: #555; margin-bottom: 30px;">
-                <%= products.description %>
+        <div style="flex: 1; min-width: 300px;">
+            <nav style="margin-bottom: 15px;">
+                <span style="color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">
+                    <%= product.category %>
+                </span>
+            </nav>
+            
+            <h1 style="font-size: 2.5rem; color: #333; margin: 0 0 15px 0;"><%= product.title %></h1>
+            
+            <p style="font-size: 2rem; color: #2d5a27; font-weight: bold; margin-bottom: 25px;">
+                $<%= product.price.toLocaleString('es-AR') %>
             </p>
+            
+            <div style="margin-bottom: 35px;">
+                <h3 style="font-size: 1.2rem; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+                    Descripción del producto
+                </h3>
+                <p style="line-height: 1.6; color: #555;">
+                    <%= product.description %>
+                </p>
+            </div>
 
-            <form action="/cart/add/<%= products.id %>" method="POST">
-                <button type="submit" class="detalle-btn-carrito" style="padding: 15px 30px; cursor: pointer;">
-                    Agregar al carrito 🛒
-                </button>
-            </form>
+            <button style="background-color: #4a4e54; color: white; padding: 18px 0; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s;">
+                Agregar al carrito
+            </button>
         </div>
-    </section>
+    </div>
 
-    <section class="productos-relacionados" style="border-top: 1px solid #eee; padding-top: 40px;">
-        <h2 style="text-align: center; margin-bottom: 30px;">También te puede interesar...</h2>
-
-        <% if (relacionados && relacionados.length > 0) { %>
-            <div class="product-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
-                <% relacionados.forEach(relacionado => { %>
-                    <%- include('../partials/productCard', { product: relacionado }) %>
+    <% if (relacionados.length > 0) { %>
+        <div style="margin-top: 100px;">
+            <h2 style="text-align: center; margin-bottom: 40px; color: #333;">También te puede interesar</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px;">
+                <% relacionados.forEach(rel => { %>
+                    <a href="/products/<%= rel.id %>" style="text-decoration: none; color: inherit; transition: 0.3s; background: white; padding: 15px; border-radius: 10px; border: 1px solid #eee; text-align: center;">
+                        <img src="<%= rel.image %>" alt="<%= rel.title %>" style="width: 100%; height: 180px; object-fit: contain; margin-bottom: 10px;">
+                        <h4 style="margin: 10px 0;"><%= rel.title %></h4>
+                        <p style="color: #2d5a27; font-weight: bold;">$<%= rel.price %></p>
+                    </a>
                 <% }) %>
             </div>
-        <% } else { %>
-            <div style="text-align: center; color: #888; padding: 20px;">
-                <p>No hay más productos similares en la categoría <%= products.category %> por el momento.</p>
-            </div>
-        <% } %>
-    </section>
-
+        </div>
+    <% } %>
 </main>
 
 <%- include('../partials/footer') %>
