@@ -77,12 +77,16 @@ class Cart {
 
         if (itemIndex !== -1) {
             cart[itemIndex].quantity -= 1;
-            // Si la cantidad llega a 0, eliminamos el producto
             if (cart[itemIndex].quantity <= 0) {
                 cart.splice(itemIndex, 1);
             }
         }
         return cart;
+    }
+
+    static removeItem(sessionCart, productId) {
+        let cart = sessionCart ? [...sessionCart] : [];
+        return cart.filter(i => i.productId != productId);
     }
 }
 

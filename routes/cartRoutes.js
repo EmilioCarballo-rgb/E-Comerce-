@@ -11,6 +11,7 @@ router.get('/checkout', cartController.renderCheckout);
 router.get('/add/:id', cartController.add);
 router.get('/increase/:id', cartController.increase);
 router.get('/decrease/:id', cartController.decrease);
+router.get('/remove/:id', cartController.remove);
 router.get('/empty', cartController.empty);
 
 // Procesamiento de formulario (Este DEBE ser POST)

@@ -19,6 +19,9 @@
     <nav class="header-nav">
         <a href="/login" title="Iniciar Sesión"><i class="fa-solid fa-user"></i></a>
         <a href="/register" title="Registrarse"><i class="fa-solid fa-user-plus"></i></a>
-        <a href="/cart" title="Carrito"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a href="/cart" title="Carrito" class="cart-icon-wrapper">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-badge"><%= cartCount %></span>
+        </a>
     </nav>
 </header>

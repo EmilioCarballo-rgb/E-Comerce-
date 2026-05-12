@@ -6,6 +6,7 @@ const port = 3000;
 const productRoutes = require ('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const userRoutes = require('./routes/userRoutes');
+const cartService = require('./services/cartService');
 
 app.use(express.static('public'));
 
@@ -25,10 +26,14 @@ app.use(session({
 }));
 
 // Middleware para inicializar el carrito
+app.use((req, _res, next) => {
+    cartService.init(req);
+    next();
+});
+
+// Expone el total de ítems del carrito a todas las vistas
 app.use((req, res, next) => {
-    if (!req.session.cart) {
-        req.session.cart = []; 
-    }
+    res.locals.cartCount = cartService.getCount(req);
     next();
 });
 
@@ -38,11 +43,11 @@ app.use('/', userRoutes);
 app.use('/', productRoutes);
 
 //Manejo de errores
-app.use((req, res, next)=> {
+app.use((_req, res, _next) => {
   res.status(404).render('pages/404');
 });
 
-app.use((err, req, res, next )=>{
+app.use((err, _req, res, _next) => {
   console.error(err.stack);
   res.status(500).render('pages/500');
 });
