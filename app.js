@@ -1,5 +1,6 @@
 const express = require ('express');
 const session = require('express-session');
+const expressLayouts = require('express-ejs-layouts'); // <-- 1. Importamos la librería
 const app = express();
 const port = 3000;
 
@@ -11,6 +12,10 @@ const cartService = require('./services/cartService');
 app.use(express.static('public'));
 
 app.set ("view engine", "ejs");
+
+// --- CONFIGURACIÓN DE LAYOUTS (US #14) ---
+app.use(expressLayouts); // <-- 2. Usamos el middleware
+app.set('layout', 'layouts/main'); // <-- 3. Definimos la ruta del layout base
 
 // --- MIDDLEWARES DE TRADUCCIÓN ---
 // Permite a Express decodificar los formularios HTML
@@ -51,6 +56,5 @@ app.use((err, _req, res, _next) => {
   console.error(err.stack);
   res.status(500).render('pages/500');
 });
-
 
 app.listen(port, () => console.log("Servidor abierto en puerto " + port));

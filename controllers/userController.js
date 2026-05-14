@@ -3,7 +3,8 @@ const User = require('../models/User');
 const userController = {
 
     getRegister: (req, res) => {
-        res.render("pages/register", { errores: [], oldData: {} });
+        // Agregamos layout: false
+        res.render("pages/register", { errores: [], oldData: {}, layout: false });
     },
 
     processRegister: (req, res) => {
@@ -19,7 +20,8 @@ const userController = {
         if (errores.length > 0) {
             return res.render("pages/register", {
                 errores: errores,
-                oldData: { nombre: nom, apellido: ape, email: mail }
+                oldData: { nombre: nom, apellido: ape, email: mail },
+                layout: false // También lo agregamos acá por si falla la validación
             });
         }
 
@@ -28,7 +30,8 @@ const userController = {
     },
 
     getLogin: (req, res) => {
-        res.render("pages/login", { errores: [] });
+        // Agregamos layout: false
+        res.render("pages/login", { errores: [], layout: false });
     },
 
     processLogin: (_req, res) => {
