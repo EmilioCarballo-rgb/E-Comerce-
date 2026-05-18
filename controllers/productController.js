@@ -1,13 +1,25 @@
-// controllers/productController.js
+
 const Product = require('../models/Product'); 
 
 const productController = {
     
-    // VISTA HOME: Los más pedidos 
+    // VISTA HOME: Los más pedidos y Catálogo general
     getIndex: (req, res) => {
         let allProducts = Product.findAll(); 
-        let mostWanted = allProducts.filter(p => p.isMostWanted === true);
         
+        // Copiamos el array para no sobreescribir los datos originales
+        let productosOrdenados = [...allProducts];
+        let orden = req.query.sort;
+
+        // LÓGICA CORREGIDA: Usamos "price" en inglés (¡Acá estaba el error!)
+        if (orden === 'asc') {
+            productosOrdenados.sort((a, b) => a.price - b.price);
+        } else if (orden === 'desc') {
+            productosOrdenados.sort((a, b) => b.price - a.price);
+        }
+
+        // Lógica de productos más pedidos
+        let mostWanted = allProducts.filter(p => p.isMostWanted === true);
         if (mostWanted.length < 10) {
             let otherProducts = allProducts.filter(p => !p.isMostWanted);
             otherProducts.sort(() => 0.5 - Math.random());
@@ -17,37 +29,42 @@ const productController = {
         }
 
         res.render("pages/index", { 
-            products: allProducts, 
+            products: productosOrdenados, 
             mostWanted: mostWanted 
         });
     },
 
-    // VISTA POR CATEGORÍA (story #10)
+    // VISTA POR CATEGORÍA
     getCategory: (req, res) => {
-        // Capturamos el nombre de la categoría de la URL
-        const categoryName = req.params.category;
+        const categoryName = req.params.category; 
         
-        // Filtramos usando el método de tu clase Product
-        const filteredProducts = Product.findByCategory(categoryName);
-        
-        // Renderizamos la nueva vista 'category.ejs'
+        let filteredProducts = Product.findAll().filter(p => p.category === categoryName);
+        let productosOrdenados = [...filteredProducts];
+        let orden = req.query.sort;
+
+        // LÓGICA CORREGIDA: Usamos "price" en inglés
+        if (orden === 'asc') {
+            productosOrdenados.sort((a, b) => a.price - b.price);
+        } else if (orden === 'desc') {
+            productosOrdenados.sort((a, b) => b.price - a.price);
+        }
+
         res.render("pages/category", { 
-            products: filteredProducts, 
+            products: productosOrdenados, 
             categoryName: categoryName 
         });
     },
+
     // VISTA DETALLE + RELACIONADOS 
     getProductById: (req, res) => {
         const idSeleccionado = req.params.id; 
         const productoEncontrado = Product.findById(idSeleccionado);
 
         if (productoEncontrado) {
-            // Lógica de Productos Relacionados (mismo rubro, distinto ID)
             let relacionados = Product.findAll().filter(p => 
                 p.category === productoEncontrado.category && p.id !== productoEncontrado.id
             );
 
-            // Seleccionamos máximo 4 al azar si hay muchos
             if (relacionados.length > 4) {
                 relacionados = relacionados.sort(() => 0.5 - Math.random()).slice(0, 4);
             }
@@ -57,7 +74,6 @@ const productController = {
                 relacionados: relacionados 
             });
         } else {
-            // Escenario 2: El producto no existe -> 404
             res.status(404).render("pages/404");
         }
     }
