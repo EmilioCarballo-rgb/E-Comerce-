@@ -1116,3 +1116,173 @@ body {
     background-color: #92969c;
     color: white;
 }
+
+/* ========================================= */
+/* - VISTA CATEGORÍAS -     */
+
+.category-main {
+    padding: 40px 10%;
+    min-height: 70vh;
+    font-family: sans-serif;
+}
+
+.category-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.category-title {
+    text-transform: capitalize;
+    color: #333;
+    font-size: 2.5rem;
+    border-bottom: 2px solid #2d5a27;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.category-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.category-sort-label {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #333;
+}
+
+/* Botones de ordenamiento */
+.btn-sort {
+    padding: 8px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-sort-asc {
+    background-color: #8db53f; 
+}
+.btn-sort-asc:hover { background-color: #7a9c36; }
+
+.btn-sort-desc {
+    background-color: #e44d26; 
+}
+.btn-sort-desc:hover { background-color: #c7411f; }
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+/* --- Estado Vacío (Sin productos) --- */
+.category-empty {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    border: 1px dashed #ccc;
+}
+
+.category-empty-title {
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.category-empty-text {
+    color: #777;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.btn-empty-return {
+    background-color: #4a4e54;
+    color: white;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: 0.3s;
+    display: inline-block;
+}
+.btn-empty-return:hover { background-color: #363d46; }
+
+/* Botón Volver al inicio en Categorías */
+.category-back-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start; 
+}
+
+.btn-back-home {
+    background-color: #4a4e54;
+    color: white;
+    padding: 8px 18px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: inline-block;
+}
+
+.btn-back-home:hover {
+    background-color: #363d46;
+}
+
+/* ========================================= */
+/* - ERROR 400 - */
+
+
+.error-400-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 65vh;
+    padding: 40px;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.error-400-title {
+    font-size: 5rem;
+    color: #e44d26;
+    margin-bottom: 10px;
+}
+
+.error-400-subtitle {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.error-400-text {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 500px;
+    margin-bottom: 40px;
+    line-height: 1.5;
+}
+
+.btn-error-400 {
+    background-color: #4a4e54;
+    color: white;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: inline-block;
+}
+
+.btn-error-400:hover {
+    background-color: #363d46;
+}

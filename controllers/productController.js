@@ -1,32 +1,27 @@
+const productsService = require('../services/productsService');
 
-const Product = require('../models/Product'); 
+// FUNCIÓN DE LA STORY 17: Normaliza y valida el ID
+const normalizeId = (id) => {
+    // Intentamos convertir lo que llegue en la URL a un Número real
+    const parsedId = Number(id);
+    
+    // Si no es un número (isNaN = is Not a Number), devolvemos null
+    if (isNaN(parsedId)) {
+        return null;
+    }
+    
+    // Si está todo bien, devolvemos el número limpio
+    return parsedId;
+};
+
 
 const productController = {
     
     // VISTA HOME: Los más pedidos y Catálogo general
     getIndex: (req, res) => {
-        let allProducts = Product.findAll(); 
-        
-        // Copiamos el array para no sobreescribir los datos originales
-        let productosOrdenados = [...allProducts];
         let orden = req.query.sort;
-
-        // LÓGICA CORREGIDA: Usamos "price" en inglés (¡Acá estaba el error!)
-        if (orden === 'asc') {
-            productosOrdenados.sort((a, b) => a.price - b.price);
-        } else if (orden === 'desc') {
-            productosOrdenados.sort((a, b) => b.price - a.price);
-        }
-
-        // Lógica de productos más pedidos
-        let mostWanted = allProducts.filter(p => p.isMostWanted === true);
-        if (mostWanted.length < 10) {
-            let otherProducts = allProducts.filter(p => !p.isMostWanted);
-            otherProducts.sort(() => 0.5 - Math.random());
-            mostWanted = [...mostWanted, ...otherProducts].slice(0, 10);
-        } else {
-            mostWanted = mostWanted.slice(0, 10);
-        }
+        let productosOrdenados = productsService.getSorted(orden);
+        let mostWanted = productsService.getMostWanted();
 
         res.render("pages/index", { 
             products: productosOrdenados, 
@@ -37,17 +32,9 @@ const productController = {
     // VISTA POR CATEGORÍA
     getCategory: (req, res) => {
         const categoryName = req.params.category; 
-        
-        let filteredProducts = Product.findAll().filter(p => p.category === categoryName);
-        let productosOrdenados = [...filteredProducts];
         let orden = req.query.sort;
 
-        // LÓGICA CORREGIDA: Usamos "price" en inglés
-        if (orden === 'asc') {
-            productosOrdenados.sort((a, b) => a.price - b.price);
-        } else if (orden === 'desc') {
-            productosOrdenados.sort((a, b) => b.price - a.price);
-        }
+        let productosOrdenados = productsService.getCategorySorted(categoryName, orden);
 
         res.render("pages/category", { 
             products: productosOrdenados, 
@@ -55,25 +42,31 @@ const productController = {
         });
     },
 
-    // VISTA DETALLE + RELACIONADOS 
+    // VISTA DETALLE + RELACIONADOS (MODIFICADO STORY 17)
     getProductById: (req, res) => {
-        const idSeleccionado = req.params.id; 
-        const productoEncontrado = Product.findById(idSeleccionado);
+        const idParams = req.params.id; 
+        
+        // 1. Pasamos el ID por nuestro "patovica" (normalizeId)
+        const idValidado = normalizeId(idParams);
+
+        // ESCENARIO 1: El ID no es numérico (ej: /products/hola) -> ERROR 400
+        if (idValidado === null) {
+            return res.status(400).render("pages/400");
+        }
+
+        // 2. Si pasó la validación, buscamos el producto
+        const productoEncontrado = productsService.getById(idValidado);
 
         if (productoEncontrado) {
-            let relacionados = Product.findAll().filter(p => 
-                p.category === productoEncontrado.category && p.id !== productoEncontrado.id
-            );
-
-            if (relacionados.length > 4) {
-                relacionados = relacionados.sort(() => 0.5 - Math.random()).slice(0, 4);
-            }
+            // Si existe, mostramos la página normal
+            let relacionados = productsService.getRelated(productoEncontrado);
 
             res.render("pages/products", { 
                 product: productoEncontrado, 
                 relacionados: relacionados 
             });
         } else {
+            // ESCENARIO 2: Es numérico pero no existe (ej: /products/9999) -> ERROR 404
             res.status(404).render("pages/404");
         }
     }

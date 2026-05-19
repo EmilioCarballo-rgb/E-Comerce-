@@ -1,35 +1,42 @@
-<main style="padding: 40px 10%; min-height: 70vh; font-family: sans-serif;">
-    
-    <div style="text-align: center; margin-bottom: 40px;">
-        <h1 style="text-transform: capitalize; color: #333; font-size: 2.5rem; border-bottom: 2px solid #2d5a27; display: inline-block; padding-bottom: 10px;">
+<main class="category-main">
+
+    <div class="category-back-container">
+        <a href="/" class="btn-back-home">Volver al inicio</a>
+    </div>
+
+    <div class="category-header">
+        <h1 class="category-title">
             Categoría: <%= categoryName %>
         </h1>
     </div>
 
-    <% if (products.length > 0) { %>
-        
-        <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-            <span style="font-weight: bold; margin-right: 5px; color: #333;">Ordenar por precio:</span>
-            <a href="/category/<%= categoryName %>?sort=asc" style="padding: 8px 20px; background-color: #8db53f; color: white; text-decoration: none; border-radius: 20px; font-size: 0.9rem; font-weight: bold; transition: 0.3s;">Menor a Mayor ⬆️</a>
-            <a href="/category/<%= categoryName %>?sort=desc" style="padding: 8px 20px; background-color: #e44d26; color: white; text-decoration: none; border-radius: 20px; font-size: 0.9rem; font-weight: bold; transition: 0.3s;">Mayor a Menor ⬇️</a>
+    <% if (products.length> 0) { %>
+
+        <div class="category-controls">
+            <span class="category-sort-label">Ordenar por precio:</span>
+
+            <a href="?sort=asc" class="btn-sort btn-sort-asc">Menor a Mayor ⬆️</a>
+            <a href="?sort=desc" class="btn-sort btn-sort-desc">Mayor a Menor ⬇️</a>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px;">
-            <% products.forEach(producto => { %>
+        <div class="category-grid">
+            <% products.forEach(producto=> { %>
                 <%- include('../partials/productCard', { product: producto }) %>
-            <% }) %>
+                    <% }) %>
         </div>
-        
-    <% } else { %>
-        <div style="text-align: center; padding: 60px 20px; background-color: #f9f9f9; border-radius: 12px; border: 1px dashed #ccc;">
-            <h2 style="color: #555; margin-bottom: 15px;">¡Uy! Todavía no hay productos acá.</h2>
-            <p style="color: #777; font-size: 1.2rem; margin-bottom: 30px;">
-                Estamos preparando nuevos ingresos para la categoría <strong><%= categoryName %></strong>. ¡Volvé pronto!
-            </p>
-            <a href="/" style="background-color: #4a4e54; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;">
-                Ver todos los productos
-            </a>
-        </div>
-    <% } %>
+
+        <% } else { %>
+            <div class="category-empty">
+                <h2 class="category-empty-title">¡Uy! Todavía no hay productos acá.</h2>
+                <p class="category-empty-text">
+                    Estamos preparando nuevos ingresos para la categoría <strong>
+                        <%= categoryName %>
+                    </strong>. ¡Volvé pronto!
+                </p>
+                <a href="/" class="btn-empty-return">
+                    Ver todos los productos
+                </a>
+            </div>
+            <% } %>
 
 </main>
