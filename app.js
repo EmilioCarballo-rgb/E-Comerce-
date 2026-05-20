@@ -1,6 +1,7 @@
 const express = require ('express');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts'); // <-- 1. Importamos la librería
+const db = require('./db/database');
 const app = express();
 const port = 3000;
 
