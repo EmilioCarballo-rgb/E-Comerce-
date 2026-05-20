@@ -37,7 +37,6 @@ const productsService = {
 
     // 4. Devuelve por categoría ordenados
    getCategorySorted: (categoryName, orden) => {
-        // Obtenemos todos y filtramos
         let allProducts = Product.findAll();
         let filteredProducts = allProducts.filter(p => p.category === categoryName);
         
@@ -62,6 +61,21 @@ const productsService = {
             relacionados = relacionados.sort(() => 0.5 - Math.random()).slice(0, 4);
         }
         return relacionados;
+    },
+
+    // 6. Devuelve productos filtrados por coincidencia parcial en el nombre o título
+    searchByName: (query) => {
+        if (!query) return [];
+
+        let allProducts = Product.findAll();
+        
+        return allProducts.filter(product => {
+            if (!product) return false;
+            
+            // Busca por .name o por .title en caso de que varíe en tu JSON
+            const textToMatch = product.name || product.title || '';
+            return textToMatch.toLowerCase().includes(query.toLowerCase());
+        });
     }
 };
 

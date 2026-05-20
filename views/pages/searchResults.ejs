@@ -1,0 +1,15 @@
+<main class="container">
+    <h2>Resultados de búsqueda para: "<%= searchWord %>"</h2>
+
+    <% if (products && products.length > 0) { %>
+        <div class="products-grid">
+            <% products.forEach(product => { %>
+                <%- include('../partials/productCard', { product: product }) %>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <div class="no-results-message">
+            <p>No se encontraron productos que coincidan con la búsqueda.</p>
+        </div>
+    <% } %>
+</main>

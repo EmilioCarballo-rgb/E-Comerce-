@@ -12,10 +12,16 @@
 <header class="main-header">
     <a href="/" class="header-logo"><h1>Mateando 🧉</h1></a>
     
-    <div class="header-search">
-        <input type="text" placeholder="Buscar Productos">
+    <form action="/search" method="GET" class="header-search">
+        <input 
+            type="text" 
+            name="query" 
+            placeholder="Buscar Productos" 
+            required
+        >
         <button type="submit">🔍</button>
-    </div>
+    </form>
+
     <nav class="header-nav">
         <a href="/login" title="Iniciar Sesión"><i class="fa-solid fa-user"></i></a>
         <a href="/register" title="Registrarse"><i class="fa-solid fa-user-plus"></i></a>
