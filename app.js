@@ -31,15 +31,15 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-// Middleware para inicializar el carrito
-app.use((req, _res, next) => {
-    cartService.init(req);
-    next();
-});
-
-// Expone el total de ítems del carrito a todas las vistas
+// Middleware para inicializar el carrito y exponerlo globalmente
 app.use((req, res, next) => {
-    res.locals.cartCount = cartService.getCount(req);
+    // 1. Inicializamos si no existe
+    cartService.init(req);
+
+    // 2. Intentamos obtener el conteo, si falla o es undefined, forzamos 0
+    const count = cartService.getCount(req);
+    res.locals.cartCount = count || 0; 
+    
     next();
 });
 

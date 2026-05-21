@@ -1,50 +1,52 @@
-// services/productsService.js
-const db = require('../db/database'); // Importamos la conexión SQLite
+const db = require('../db/database'); // Traemos la conexión a la base de datos
 
 const productsService = {
-    // 1. Busca por ID
-    getById: (id) => {
-        // .get() nos devuelve un único objeto, perfecto para un producto por ID
-        return db.prepare('SELECT * FROM products WHERE id = ?').get(id);
-    },
-
-    // 2. Devuelve todos ordenados
+    // 1. Obtener todos los productos (con opción de ordenarlos)
     getSorted: (orden) => {
-        const direction = orden === 'desc' ? 'DESC' : 'ASC';
-        return db.prepare(`SELECT * FROM products ORDER BY price ${direction}`).all();
-    },
-
-    // 3. Devuelve los más pedidos
-    getMostWanted: () => {
-        // Obtenemos los marcados como 'isMostWanted'
-        const mostWanted = db.prepare('SELECT * FROM products WHERE isMostWanted = 1 LIMIT 10').all();
-        
-        // Si no hay 10, completamos con productos aleatorios (fall-back logic)
-        if (mostWanted.length < 10) {
-            const missingCount = 10 - mostWanted.length;
-            const randomProducts = db.prepare('SELECT * FROM products WHERE isMostWanted = 0 ORDER BY RANDOM() LIMIT ?').all(missingCount);
-            return [...mostWanted, ...randomProducts];
+        let query = "SELECT * FROM products";
+        if (orden === 'asc') {
+            query += " ORDER BY price ASC";
+        } else if (orden === 'desc') {
+            query += " ORDER BY price DESC";
         }
-        return mostWanted;
+        return db.prepare(query).all(); // .all() te devuelve un Array con todos los resultados
     },
 
-    // 4. Devuelve por categoría ordenados
+    // 2. Obtener un producto por ID
+    getById: (id) => {
+        // .get() te devuelve un solo objeto (justo lo que necesitamos para el detalle)
+        return db.prepare("SELECT * FROM products WHERE id = ?").get(id);
+    },
+
+    // 3. Filtrar por categoría y ordenar
     getCategorySorted: (categoryName, orden) => {
-        const direction = orden === 'desc' ? 'DESC' : 'ASC';
-        return db.prepare(`SELECT * FROM products WHERE category = ? ORDER BY price ${direction}`).all(categoryName);
+        let query = "SELECT * FROM products WHERE category = ?";
+        if (orden === 'asc') {
+            query += " ORDER BY price ASC";
+        } else if (orden === 'desc') {
+            query += " ORDER BY price DESC";
+        }
+        return db.prepare(query).all(categoryName);
     },
 
-    // 5. Devuelve productos relacionados
-    getRelated: (product) => {
-        return db.prepare('SELECT * FROM products WHERE category = ? AND id != ? ORDER BY RANDOM() LIMIT 4')
-                 .all(product.category, product.id);
+    // 4. Buscar por nombre (NUEVO)
+    searchByName: (nombreBuscado) => {
+        // Usamos LIKE con los comodines % para que encuentre coincidencias parciales
+        // Ej: si buscas "termo", te va a traer "Termo Stanley" o "Termo Media Manija"
+        return db.prepare("SELECT * FROM products WHERE name LIKE ?").all(`%${nombreBuscado}%`);
     },
 
-    // 6. Búsqueda por nombre
-    searchByName: (query) => {
-        if (!query) return [];
-        // LIKE %?% permite buscar coincidencias parciales en el nombre
-        return db.prepare('SELECT * FROM products WHERE name LIKE ?').all(`%${query}%`);
+    // 5. Obtener los más pedidos / sugeridos
+    getMostWanted: () => {
+        // En SQLite los booleanos se guardan como 1 (true) y 0 (false)
+        return db.prepare("SELECT * FROM products WHERE isMostWanted = 1 LIMIT 10").all();
+    },
+
+    // 6. Obtener productos relacionados
+    getRelated: (producto) => {
+        // Misma categoría, distinto ID. 
+        // ¿Te acordás del choclo de Math.random() que teníamos antes? En SQL es una papa: ORDER BY RANDOM()
+        return db.prepare("SELECT * FROM products WHERE category = ? AND id != ? ORDER BY RANDOM() LIMIT 4").all(producto.category, producto.id);
     }
 };
 
