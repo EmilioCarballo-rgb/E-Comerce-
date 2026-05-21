@@ -1,43 +1,54 @@
-const Cart = require('../models/Cart');
+const db = require('../db/database'); // Importamos la conexión a SQLite
 
 const cartService = {
-
+    // Inicializa el carrito en la sesión si no existe
     init: (req) => {
         if (!req.session.cart) {
             req.session.cart = [];
         }
     },
 
-    getDetailedCart: (req) => {
-        return Cart.getDetailedCart(req.session.cart);
+    // Agrega un producto (guardamos solo ID y cantidad)
+    addItem: (req, productId, quantity) => {
+        // Validamos que el producto exista en la base antes de agregarlo
+        const product = db.prepare("SELECT id, name, price FROM products WHERE id = ?").get(productId);
+        
+        if (product) {
+            req.session.cart.push({
+                id: product.id,
+                quantity: parseInt(quantity)
+            });
+        }
     },
 
+    // Obtiene los productos del carrito con datos frescos de la DB
+    getCartDetails: (req) => {
+        return req.session.cart.map(item => {
+            // Buscamos los datos actuales en SQLite
+            const product = db.prepare("SELECT * FROM products WHERE id = ?").get(item.id);
+            
+            return {
+                ...product, // Traemos todos los datos (nombre, imagen, etc.)
+                quantity: item.quantity,
+                subtotal: product.price * item.quantity // Calculamos el subtotal real
+            };
+        });
+    },
+
+    // Calcula el total del carrito usando precios de la base de datos
     calculateTotal: (req) => {
-        return Cart.calculateTotal(req.session.cart);
+        const details = cartService.getCartDetails(req);
+        return details.reduce((total, item) => total + item.subtotal, 0);
     },
 
     getCount: (req) => {
-        return req.session.cart.reduce((sum, item) => sum + item.quantity, 0);
-    },
-
-    addItem: (req, productId) => {
-        req.session.cart = Cart.addItem(req.session.cart, productId);
-    },
-
-    increaseItem: (req, productId) => {
-        req.session.cart = Cart.increaseItem(req.session.cart, productId);
-    },
-
-    decreaseItem: (req, productId) => {
-        req.session.cart = Cart.decreaseItem(req.session.cart, productId);
-    },
+        if (!req.session.cart) return 0;
+        // Sumamos la cantidad (quantity) de cada item
+        return req.session.cart.reduce((total, item) => total + item.quantity, 0);
+},
 
     removeItem: (req, productId) => {
-        req.session.cart = Cart.removeItem(req.session.cart, productId);
-    },
-
-    empty: (req) => {
-        req.session.cart = [];
+        req.session.cart = req.session.cart.filter(item => item.id != productId);
     }
 };
 
