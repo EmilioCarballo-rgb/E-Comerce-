@@ -1,81 +1,50 @@
-// Importá tu modelo de Producto (ajustá la ruta si está en otro lado)
-const Product = require('../models/Product'); 
+// services/productsService.js
+const db = require('../db/database'); // Importamos la conexión SQLite
 
 const productsService = {
     // 1. Busca por ID
     getById: (id) => {
-        return Product.findById(id);
+        // .get() nos devuelve un único objeto, perfecto para un producto por ID
+        return db.prepare('SELECT * FROM products WHERE id = ?').get(id);
     },
 
-    // 2. Devuelve todos ordenados (Para el Index)
+    // 2. Devuelve todos ordenados
     getSorted: (orden) => {
-        let allProducts = Product.findAll(); 
-        let productosOrdenados = [...allProducts];
-
-        if (orden === 'asc') {
-            productosOrdenados.sort((a, b) => a.price - b.price);
-        } else if (orden === 'desc') {
-            productosOrdenados.sort((a, b) => b.price - a.price);
-        }
-        return productosOrdenados;
+        const direction = orden === 'desc' ? 'DESC' : 'ASC';
+        return db.prepare(`SELECT * FROM products ORDER BY price ${direction}`).all();
     },
 
-    // 3. Devuelve los más pedidos mezclados
+    // 3. Devuelve los más pedidos
     getMostWanted: () => {
-        let allProducts = Product.findAll();
-        let mostWanted = allProducts.filter(p => p.isMostWanted === true);
+        // Obtenemos los marcados como 'isMostWanted'
+        const mostWanted = db.prepare('SELECT * FROM products WHERE isMostWanted = 1 LIMIT 10').all();
         
+        // Si no hay 10, completamos con productos aleatorios (fall-back logic)
         if (mostWanted.length < 10) {
-            let otherProducts = allProducts.filter(p => !p.isMostWanted);
-            otherProducts.sort(() => 0.5 - Math.random());
-            mostWanted = [...mostWanted, ...otherProducts].slice(0, 10);
-        } else {
-            mostWanted = mostWanted.slice(0, 10);
+            const missingCount = 10 - mostWanted.length;
+            const randomProducts = db.prepare('SELECT * FROM products WHERE isMostWanted = 0 ORDER BY RANDOM() LIMIT ?').all(missingCount);
+            return [...mostWanted, ...randomProducts];
         }
         return mostWanted;
     },
 
     // 4. Devuelve por categoría ordenados
-   getCategorySorted: (categoryName, orden) => {
-        let allProducts = Product.findAll();
-        let filteredProducts = allProducts.filter(p => p.category === categoryName);
-        
-        let productosOrdenados = [...filteredProducts];
-
-        if (orden === 'asc') {
-            productosOrdenados.sort((a, b) => a.price - b.price);
-        } else if (orden === 'desc') {
-            productosOrdenados.sort((a, b) => b.price - a.price);
-        }
-
-        return productosOrdenados;
+    getCategorySorted: (categoryName, orden) => {
+        const direction = orden === 'desc' ? 'DESC' : 'ASC';
+        return db.prepare(`SELECT * FROM products WHERE category = ? ORDER BY price ${direction}`).all(categoryName);
     },
 
-    // 5. Devuelve productos relacionados al azar
-    getRelated: (productoEncontrado) => {
-        let relacionados = Product.findAll().filter(p => 
-            p.category === productoEncontrado.category && p.id !== productoEncontrado.id
-        );
-
-        if (relacionados.length > 4) {
-            relacionados = relacionados.sort(() => 0.5 - Math.random()).slice(0, 4);
-        }
-        return relacionados;
+    // 5. Devuelve productos relacionados
+    getRelated: (product) => {
+        return db.prepare('SELECT * FROM products WHERE category = ? AND id != ? ORDER BY RANDOM() LIMIT 4')
+                 .all(product.category, product.id);
     },
 
-    // 6. Devuelve productos filtrados por coincidencia parcial en el nombre o título
+    // 6. Búsqueda por nombre
     searchByName: (query) => {
         if (!query) return [];
-
-        let allProducts = Product.findAll();
-        
-        return allProducts.filter(product => {
-            if (!product) return false;
-            
-            // Busca por .name o por .title en caso de que varíe en tu JSON
-            const textToMatch = product.name || product.title || '';
-            return textToMatch.toLowerCase().includes(query.toLowerCase());
-        });
+        // LIKE %?% permite buscar coincidencias parciales en el nombre
+        return db.prepare('SELECT * FROM products WHERE name LIKE ?').all(`%${query}%`);
     }
 };
 
