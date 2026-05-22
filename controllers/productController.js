@@ -1,13 +1,5 @@
 const productsService = require('../services/productsService');
-
-// FUNCIÓN DE LA STORY 17: Normaliza y valida el ID
-const normalizeId = (id) => {
-    const parsedId = Number(id);
-    if (isNaN(parsedId)) {
-        return null;
-    }
-    return parsedId;
-};
+const normalizeId = require('../utils/normalizeId');
 
 const productController = {
     
@@ -36,27 +28,21 @@ const productController = {
         });
     },
 
-    // VISTA DETALLE + RELACIONADOS (MODIFICADO STORY 17)
+    // VISTA DETALLE + RELACIONADOS
     getProductById: (req, res) => {
-        const idParams = req.params.id; 
-        const idValidado = normalizeId(idParams);
+        const { id: idValidado, status } = normalizeId(req.params.id);
 
-        if (idValidado === null) {
-            return res.status(400).render("pages/400");
+        if (status) {
+            return res.status(status).render(`pages/${status}`);
         }
 
         const productoEncontrado = productsService.getById(idValidado);
+        const relacionados = productsService.getRelated(productoEncontrado);
 
-        if (productoEncontrado) {
-            let relacionados = productsService.getRelated(productoEncontrado);
-
-            res.render("pages/products", { 
-                product: productoEncontrado, 
-                relacionados: relacionados 
-            });
-        } else {
-            res.status(404).render("pages/404");
-        }
+        res.render("pages/products", {
+            product: productoEncontrado,
+            relacionados: relacionados
+        });
     },
 
     // VISTA RESULTADOS DE BÚSQUEDA

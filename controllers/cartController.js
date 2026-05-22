@@ -1,31 +1,40 @@
 const cartService = require('../services/cartService');
+const normalizeId = require('../utils/normalizeId');
 
 const cartController = {
 
     viewCart: (req, res) => {
         res.render("pages/cart", {
-            cart: cartService.getDetailedCart(req),
+            cart: cartService.getCartDetails(req),
             total: cartService.calculateTotal(req)
         });
     },
 
     add: (req, res) => {
-        cartService.addItem(req, req.params.id);
+        const { id, status } = normalizeId(req.params.id);
+        if (status) return res.status(status).render(`pages/${status}`);
+        cartService.addItem(req, id);
         res.redirect('/cart');
     },
 
     increase: (req, res) => {
-        cartService.increaseItem(req, req.params.id);
+        const { id, status } = normalizeId(req.params.id);
+        if (status) return res.status(status).render(`pages/${status}`);
+        cartService.increaseItem(req, id);
         res.redirect('/cart');
     },
 
     decrease: (req, res) => {
-        cartService.decreaseItem(req, req.params.id);
+        const { id, status } = normalizeId(req.params.id);
+        if (status) return res.status(status).render(`pages/${status}`);
+        cartService.decreaseItem(req, id);
         res.redirect('/cart');
     },
 
     remove: (req, res) => {
-        cartService.removeItem(req, req.params.id);
+        const { id, status } = normalizeId(req.params.id);
+        if (status) return res.status(status).render(`pages/${status}`);
+        cartService.removeItem(req, id);
         res.redirect('/cart');
     },
 

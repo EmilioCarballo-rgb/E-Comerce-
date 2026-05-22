@@ -9,15 +9,15 @@ const cartService = {
     },
 
     // Agrega un producto (guardamos solo ID y cantidad)
-    addItem: (req, productId, quantity) => {
-        // Validamos que el producto exista en la base antes de agregarlo
+    addItem: (req, productId, quantity = 1) => {
         const product = db.prepare("SELECT id, name, price FROM products WHERE id = ?").get(productId);
-        
-        if (product) {
-            req.session.cart.push({
-                id: product.id,
-                quantity: parseInt(quantity)
-            });
+        if (!product) return;
+
+        const existing = req.session.cart.find(item => item.id === product.id);
+        if (existing) {
+            existing.quantity += parseInt(quantity) || 1;
+        } else {
+            req.session.cart.push({ id: product.id, quantity: parseInt(quantity) || 1 });
         }
     },
 
@@ -49,6 +49,22 @@ const cartService = {
 
     removeItem: (req, productId) => {
         req.session.cart = req.session.cart.filter(item => item.id != productId);
+    },
+
+    increaseItem: (req, productId) => {
+        const item = req.session.cart.find(i => i.id == productId);
+        if (item) item.quantity += 1;
+    },
+
+    decreaseItem: (req, productId) => {
+        const item = req.session.cart.find(i => i.id == productId);
+        if (!item) return;
+        item.quantity -= 1;
+        if (item.quantity <= 0) cartService.removeItem(req, productId);
+    },
+
+    empty: (req) => {
+        req.session.cart = [];
     }
 };
 
