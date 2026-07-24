@@ -1,29 +1,33 @@
-const express = require ('express');
+const express = require('express');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts'); // <-- 1. Importamos la librería
+const cors = require('cors'); // <-- NUEVO: Importamos cors
 const db = require('./db/database');
 const app = express();
 const port = 3000;
 
-const productRoutes = require ('./routes/productRoutes');
+const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cartService = require('./services/cartService');
 
-app.use(express.static('public'));
+// --- MIDDLEWARES GLOBALES (CORS y Body Parsers) ---
+app.use(cors()); // <-- NUEVO: Usamos cors para permitir peticiones desde React
 
-app.set ("view engine", "ejs");
+// Permite a Express decodificar los formularios HTML
+app.use(express.urlencoded({ extended: true }));
+// Permite a Express decodificar peticiones en formato JSON (¡Ya lo tenías, perfecto!)
+app.use(express.json());
+
+// --- CONFIGURACIÓN DE VISTAS (EJS) ---
+app.use(express.static('public'));
+app.set("view engine", "ejs");
 
 // --- CONFIGURACIÓN DE LAYOUTS (US #14) ---
 app.use(expressLayouts); // <-- 2. Usamos el middleware
 app.set('layout', 'layouts/main'); // <-- 3. Definimos la ruta del layout base
 
-// --- MIDDLEWARES DE TRADUCCIÓN ---
-// Permite a Express decodificar los formularios HTML
-app.use(express.urlencoded({ extended: true }));
-// Permite a Express decodificar peticiones en formato JSON
-app.use(express.json());
-
+// --- SESIÓN Y CARRITO ---
 app.use(session({
     secret: 'ecommerce_secret_key' ,
     resave: false,                 
@@ -43,12 +47,15 @@ app.use((req, res, next) => {
     next();
 });
 
-//Rutas principales MVC
+// --- RUTAS ---
 app.use('/cart', cartRoutes);
 app.use('/', userRoutes);
-app.use('/', productRoutes);
 
-//Manejo de errores
+// NUEVO: Reemplazamos app.use('/', productRoutes) por el prefijo de la API
+app.use('/api/products', productRoutes);
+
+
+// --- MANEJO DE ERRORES ---
 app.use((_req, res, _next) => {
   res.status(404).render('pages/404');
 });
