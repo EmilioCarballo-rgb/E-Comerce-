@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^12.10.0",
+    "cors": "^2.8.6",
     "ejs": "^5.0.1",
     "express": "^5.2.1",
     "express-ejs-layouts": "^2.5.1",
