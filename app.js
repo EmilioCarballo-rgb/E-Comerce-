@@ -2,6 +2,8 @@ const express = require('express');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts'); // <-- 1. Importamos la librería
 const cors = require('cors'); // <-- NUEVO: Importamos cors
+const statsRoutes = require('./routes/statsRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 const db = require('./db/database');
 const app = express();
 const port = 3000;
@@ -50,10 +52,11 @@ app.use((req, res, next) => {
 // --- RUTAS ---
 app.use('/cart', cartRoutes);
 app.use('/', userRoutes);
+app.use('/api/stats', statsRoutes);
 
 // NUEVO: Reemplazamos app.use('/', productRoutes) por el prefijo de la API
 app.use('/api/products', productRoutes);
-
+app.use('/api/categories', categoryRoutes);
 
 // --- MANEJO DE ERRORES ---
 app.use((_req, res, _next) => {
