@@ -42,12 +42,21 @@ const productsService = {
         return db.prepare("SELECT * FROM products WHERE isMostWanted = 1 LIMIT 10").all();
     },
 
-    // 6. Obtener productos relacionados
+// Obtener productos relacionados (misma categoría, distinto ID)
     getRelated: (producto) => {
-        // Misma categoría, distinto ID. 
-        // ¿Te acordás del choclo de Math.random() que teníamos antes? En SQL es una papa: ORDER BY RANDOM()
-        return db.prepare("SELECT * FROM products WHERE category = ? AND id != ? ORDER BY RANDOM() LIMIT 4").all(producto.category, producto.id);
+        // Si por algún motivo el producto no viene, devolvemos un array vacío
+        if (!producto || !producto.category) return [];
+
+        // Buscamos productos de la misma categoría, excluyendo el actual. 
+        // Usamos LIMIT 4 para que la sección de relacionados no sea infinita.
+        const stmt = db.prepare('SELECT * FROM products WHERE category = ? AND id != ? LIMIT 4');
+        return stmt.all(producto.category, producto.id);
+    },
+
+    // Obtener la cantidad total de productos
+    count: () => {
+        const result = db.prepare('SELECT COUNT(*) as total FROM products').get();
+        return result.total;
     }
 };
-
 module.exports = productsService;

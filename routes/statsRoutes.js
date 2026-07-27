@@ -1,0 +1,8 @@
+const express = require('express');
+const router = express.Router();
+const statsController = require('../controllers/statsController');
+
+// Ruta final: GET /api/stats
+router.get('/', statsController.getGeneralStats);
+
+module.exports = router;
