@@ -6,7 +6,7 @@ const statsRoutes = require('./routes/statsRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const db = require('./db/database');
 const app = express();
-const port = 3000;
+const port = 3001;
 
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
@@ -14,7 +14,10 @@ const userRoutes = require('./routes/userRoutes');
 const cartService = require('./services/cartService');
 
 // --- MIDDLEWARES GLOBALES (CORS y Body Parsers) ---
-app.use(cors()); // <-- NUEVO: Usamos cors para permitir peticiones desde React
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 // Permite a Express decodificar los formularios HTML
 app.use(express.urlencoded({ extended: true }));
