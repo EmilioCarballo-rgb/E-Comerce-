@@ -1,0 +1,101 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.home-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f4f4f5;
+  margin: 0;
+}
+
+.home-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.home-card {
+  background-color: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  padding: 24px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.2s;
+}
+
+.home-card:hover {
+  border-color: #3f3f46;
+}
+
+.card-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.card-icon {
+  font-size: 1.8rem;
+}
+
+.card-info h3 {
+  font-size: 1.3rem;
+  color: #f4f4f5;
+  margin: 0;
+  font-weight: 600;
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Botones de acción dentro de las tarjetas */
+.btn-secondary {
+  background-color: #27272a;
+  color: #f4f4f5;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #3f3f46;
+}
+
+.btn-primary {
+  background-color: #3f3f46;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #52525b;
+}
+
+/* Responsive para pantallas chicas */
+@media (max-width: 768px) {
+  .home-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .card-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
