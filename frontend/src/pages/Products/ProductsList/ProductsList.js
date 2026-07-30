@@ -24,10 +24,18 @@ const ProductsList = () => {
       });
   }, []);
 
-  // Filtrado de productos por nombre (User Story #8 adelantada para que funcione perfecto el buscador)
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filtrado de productos por nombre, categoría o descripción (User Story #8 + BONUS)
+  const filteredProducts = products.filter((product) => {
+    const searchLower = searchTerm.toLowerCase();
+    
+    // Verificamos de forma segura (con ?.) por si algún producto no tiene el campo definido
+    const matchName = product.name?.toLowerCase().includes(searchLower);
+    const matchCategory = product.category?.toLowerCase().includes(searchLower);
+    const matchDescription = product.description?.toLowerCase().includes(searchLower);
+
+    // Retorna true si coincide con cualquiera de los tres campos
+    return matchName || matchCategory || matchDescription;
+  });
 
   return (
     <div className="products-list-container">

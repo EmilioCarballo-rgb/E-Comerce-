@@ -10,6 +10,10 @@ import Home from './pages/Home/Home';
 import ProductsList from './pages/Products/ProductsList/ProductsList';
 import ProductView from './pages/Products/ProductView/ProductView';
 
+// Importamos las páginas nuevas (Ajustá "ProductsNew" o "ProductNew" según cómo dejaste la carpeta finalmente)
+import ProductsNew from './pages/Products/ProductsNew/ProductsNew';
+import CategoriesList from './pages/Categories/CategoriesList/CategoriesList';
+
 function App() {
   return (
     <Router>
@@ -21,11 +25,14 @@ function App() {
           {/* 📦 Página de productos */}
           <Route path="/products" element={<ProductsList />} />
           
+          {/* 📦 Página para agregar un nuevo producto (Va arriba de la ruta con :id) */}
+          <Route path="/products/new" element={<ProductsNew />} /> 
+          
           {/* 📦 Página de un producto específico (por ID) */}
           <Route path="/products/:id" element={<ProductView />} />
-          
-          {/* 📦 Página para agregar un nuevo producto */}
-          <Route path="/products/new" element={<ProductView />} /> 
+
+          {/* 🏷️ Página de categorías */}
+          <Route path="/categories" element={<CategoriesList />} />
           
           {/* 👤 Página de perfil del usuario */}
           <Route path="/profile" element={<div><h1>Página de Perfil (En construcción)</h1></div>} />
