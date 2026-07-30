@@ -60,12 +60,12 @@ app.use('/api/categories', categoryRoutes);
 
 // --- MANEJO DE ERRORES ---
 app.use((_req, res, _next) => {
-  res.status(404).render('pages/404');
+  res.status(404).json({ error: "Ruta no encontrada" });
 });
 
 app.use((err, _req, res, _next) => {
   console.error(err.stack);
-  res.status(500).render('pages/500');
+  res.status(500).json({ error: "Error interno del servidor", detalle: err.message });
 });
 
 app.listen(port, () => console.log("Servidor abierto en puerto " + port));
