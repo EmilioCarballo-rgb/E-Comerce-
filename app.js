@@ -1,71 +1,54 @@
 const express = require('express');
-const session = require('express-session');
-const expressLayouts = require('express-ejs-layouts'); // <-- 1. Importamos la librería
-const cors = require('cors'); // <-- NUEVO: Importamos cors
-const statsRoutes = require('./routes/statsRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-const db = require('./db/database');
+const expressLayouts = require('express-ejs-layouts');
+const cors = require('cors'); // 📦 Requisito: Habilitar CORS
+const path = require('path');
 const app = express();
-const port = 3000;
 
-const productRoutes = require('./routes/productRoutes');
-const cartRoutes = require('./routes/cartRoutes');
-const userRoutes = require('./routes/userRoutes');
-const cartService = require('./services/cartService');
+const session = require('express-session');
 
-// --- MIDDLEWARES GLOBALES (CORS y Body Parsers) ---
-app.use(cors()); // <-- NUEVO: Usamos cors para permitir peticiones desde React
-
-// Permite a Express decodificar los formularios HTML
+// --- MIDDLEWARES GLOBALES ---
+app.use(express.json()); // 📦 Requisito: Interpretar JSON
 app.use(express.urlencoded({ extended: true }));
-// Permite a Express decodificar peticiones en formato JSON (¡Ya lo tenías, perfecto!)
-app.use(express.json());
+app.use(cors()); // Permite que el puerto 3000 (React) hable con el 3001 (Express)
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressLayouts);
+app.set('layout', 'layouts/main');
 
-// --- CONFIGURACIÓN DE VISTAS (EJS) ---
-app.use(express.static('public'));
-app.set("view engine", "ejs");
-
-// --- CONFIGURACIÓN DE LAYOUTS (US #14) ---
-app.use(expressLayouts); // <-- 2. Usamos el middleware
-app.set('layout', 'layouts/main'); // <-- 3. Definimos la ruta del layout base
-
-// --- SESIÓN Y CARRITO ---
 app.use(session({
-    secret: 'ecommerce_secret_key' ,
-    resave: false,                 
-    saveUninitialized: true,      
-    cookie: { secure: false }
+    secret: 'secreto-ecommerce-mate', 
+    resave: false,
+    saveUninitialized: true
 }));
 
-// Middleware para inicializar el carrito y exponerlo globalmente
+// --- MIDDLEWARE GLOBAL PARA EL CARRITO ---
 app.use((req, res, next) => {
-    // 1. Inicializamos si no existe
-    cartService.init(req);
-
-    // 2. Intentamos obtener el conteo, si falla o es undefined, forzamos 0
-    const count = cartService.getCount(req);
-    res.locals.cartCount = count || 0; 
     
+    res.locals.cartCount = (req.session && req.session.cart )? req.session.cart.length : 0; 
     next();
 });
 
-// --- RUTAS ---
+// --- CONFIGURACIÓN SSR (CLIENTE) ---
+app.set('view engine', 'ejs'); 
+app.set('views', path.join(__dirname, 'views'));
+
+// --- RUTAS API REST (DASHBOARD REACT) ---
+const productsApiRoutes = require('./routes/api/productsApiRoutes');
+app.use('/api/products', productsApiRoutes);
+
+// --- RUTAS SSR (E-COMMERCE EJS) ---
+const productRoutes = require('./routes/productRoutes');
+const userRoutes = require('./routes/userRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+
+const productsController = require('./controllers/productController');
+
+app.get('/', productsController.index);
+
+app.use('/users', userRoutes);
 app.use('/cart', cartRoutes);
-app.use('/', userRoutes);
-app.use('/api/stats', statsRoutes);
+app.use('/category', categoryRoutes);
+app.use('/products', productRoutes);
 
-// NUEVO: Reemplazamos app.use('/', productRoutes) por el prefijo de la API
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-
-// --- MANEJO DE ERRORES ---
-app.use((_req, res, _next) => {
-  res.status(404).json({ error: "Ruta no encontrada" });
-});
-
-app.use((err, _req, res, _next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Error interno del servidor", detalle: err.message });
-});
-
-app.listen(port, () => console.log("Servidor abierto en puerto " + port));
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));

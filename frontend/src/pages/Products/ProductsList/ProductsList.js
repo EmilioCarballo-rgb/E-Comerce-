@@ -1,99 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './ProductsList.css';
+import { Link } from 'react-router-dom';
 
+// Ya no recibimos la prop "isAdmin"
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
 
-  // Petición GET a la ruta /products de la API Rest
+  // Fetch a tu API en Express (puerto 3001) para traer los productos de SQLite
   useEffect(() => {
-    fetch('http://localhost:3000/products') // Ajusta el puerto del backend si es necesario
-      .then((response) => response.json())
-      .then((data) => {
-        // Manejamos si la API responde con un array directo o un objeto con propiedad
-        const productsList = Array.isArray(data) ? data : data.products || [];
-        setProducts(productsList);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error al cargar los productos:', error);
-        setLoading(false);
-      });
+    fetch('http://localhost:3001/api/products')
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error('Error al cargar productos:', err));
   }, []);
 
-  // Filtrado de productos por nombre, categoría o descripción (User Story #8 + BONUS)
-  const filteredProducts = products.filter((product) => {
-    const searchLower = searchTerm.toLowerCase();
-    
-    // Verificamos de forma segura (con ?.) por si algún producto no tiene el campo definido
-    const matchName = product.name?.toLowerCase().includes(searchLower);
-    const matchCategory = product.category?.toLowerCase().includes(searchLower);
-    const matchDescription = product.description?.toLowerCase().includes(searchLower);
-
-    // Retorna true si coincide con cualquiera de los tres campos
-    return matchName || matchCategory || matchDescription;
-  });
+  const handleDelete = (id) => {
+    // Lógica para eliminar un producto
+    console.log("Eliminando producto", id);
+  };
 
   return (
     <div className="products-list-container">
-      {/* Encabezado fijo con título, buscador y botón Agregar */}
-      <div className="products-header">
-        <h2>Productos</h2>
-        <div className="products-actions">
-          <div className="search-box">
-            <span className="search-icon">🔍</span>
-            <input
-              type="text"
-              placeholder="Buscar productos"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <button 
-            className="btn-add-product"
-            onClick={() => navigate('/products/new')}
-            title="Agregar Producto"
-          >
-            +
-          </button>
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <h3>Catálogo de Productos</h3>
+        
+        {/* Este botón ahora SIEMPRE se muestra porque estamos en el panel de Admin */}
+        <Link to="/products/new" style={{ background: '#007bff', color: 'white', padding: '10px 15px', textDecoration: 'none', borderRadius: '5px' }}>
+          + Nuevo Producto
+        </Link>
       </div>
 
-      {/* Contenido de la lista */}
-      <div className="products-content">
-        {loading ? (
-          <div className="loading-state">Cargando…</div>
-        ) : filteredProducts.length === 0 ? (
-          <div className="no-results">No hay elementos coincidentes.</div>
-        ) : (
-          <div className="products-items-list">
-            {filteredProducts.map((product) => (
-              <div 
-                key={product.id} 
-                className="product-item-card"
-                onClick={() => navigate(`/products/${product.id}`)}
-              >
-                <div className="product-item-image">
-                  {product.image ? (
-                    <img src={product.image} alt={product.name} />
-                  ) : (
-                    <div className="image-placeholder"></div>
-                  )}
-                </div>
-                <div className="product-item-info">
-                  <h3>{product.name}</h3>
-                  <p>#{product.id}</p>
-                </div>
-                <div className="product-item-arrow">
-                  <span>›</span>
-                </div>
-              </div>
-            ))}
+      <div className="products-grid">
+        {products.map((product) => (
+          <div key={product.id} className="product-card" style={{ border: '1px solid #ccc', padding: '15px', marginBottom: '10px' }}>
+            <h4>{product.name}</h4>
+            <p>Precio: ${product.price}</p>
+            
+            {/* Estos botones de administración ahora SIEMPRE están visibles */}
+            <div className="admin-actions" style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
+              <Link to={`/products/${product.id}/edit`} style={{ color: 'orange', textDecoration: 'none' }}>
+                ✏️ Editar
+              </Link>
+              <button onClick={() => handleDelete(product.id)} style={{ color: 'red', border: 'none', background: 'none', cursor: 'pointer' }}>
+                🗑️ Eliminar
+              </button>
+            </div>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );

@@ -44,7 +44,7 @@ const MainLayout = ({ children }) => {
           <h2>Dashboard E-Commerce</h2>
         </div>
 
-        {/* Opciones del menú principal con indicador de ruta activa */}
+        {/* Opciones del menú principal */}
         <nav className="sidebar-nav">
           <NavLink 
             to="/" 
@@ -71,7 +71,7 @@ const MainLayout = ({ children }) => {
           </NavLink>
         </nav>
 
-        {/* Enlace de perfil del usuario actual ubicado en la parte inferior */}
+        {/* Enlace de perfil del usuario */}
         <div className="sidebar-footer">
           <NavLink 
             to="/profile" 
@@ -79,7 +79,7 @@ const MainLayout = ({ children }) => {
             className={({ isActive }) => (isActive ? 'user-profile-link active' : 'user-profile-link')}
           >
             <span className="user-avatar">👤</span>
-            <span className="user-name">Olivia</span>
+            <span className="user-name">Olivia (Admin)</span>
           </NavLink>
         </div>
       </aside>
@@ -92,6 +92,7 @@ const MainLayout = ({ children }) => {
           <div className="header-title-container">
             <h2>{getHeaderTitle()}</h2>
           </div>
+          {/* Eliminamos el botón del carrito de aquí. Ahora el header solo tiene el título. */}
         </header>
 
         <div className="main-content">

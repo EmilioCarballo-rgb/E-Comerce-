@@ -1,42 +1,21 @@
-<main class="category-main">
-
-    <div class="category-back-container">
-        <a href="/" class="btn-back-home">Volver al inicio</a>
-    </div>
-
-    <div class="category-header">
-        <h1 class="category-title">
+<main class="category-main" style="padding: 40px 5%;">
+    <div class="category-header" style="text-align: center; margin-bottom: 30px;">
+        <h2 class="category-title" style="text-transform: capitalize; font-size: 2.5rem; color: #333;">
             Categoría: <%= categoryName %>
-        </h1>
+        </h2>
     </div>
 
-    <% if (products.length> 0) { %>
-
-        <div class="category-controls">
-            <span class="category-sort-label">Ordenar por precio:</span>
-
-            <a href="?sort=asc" class="btn-sort btn-sort-asc">Menor a Mayor ⬆️</a>
-            <a href="?sort=desc" class="btn-sort btn-sort-desc">Mayor a Menor ⬇️</a>
+    <% if (products && products.length > 0) { %>
+        <div class="product-grid">
+            <% products.forEach(product => { %>
+                <!-- Asegúrate de que la ruta a tu partial de productCard sea correcta -->
+                <%- include('../partials/productCard', { product: product }) %>
+            <% }) %>
         </div>
-
-        <div class="category-grid">
-            <% products.forEach(producto=> { %>
-                <%- include('../partials/productCard', { product: producto }) %>
-                    <% }) %>
+    <% } else { %>
+        <div style="text-align: center; padding: 40px;">
+            <p style="font-size: 1.2rem; color: #666;">No hay productos disponibles en esta categoría por el momento.</p>
+            <a href="/" class="btn-empty-return" style="background-color: #4a4e54; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Volver al inicio</a>
         </div>
-
-        <% } else { %>
-            <div class="category-empty">
-                <h2 class="category-empty-title">¡Uy! Todavía no hay productos acá.</h2>
-                <p class="category-empty-text">
-                    Estamos preparando nuevos ingresos para la categoría <strong>
-                        <%= categoryName %>
-                    </strong>. ¡Volvé pronto!
-                </p>
-                <a href="/" class="btn-empty-return">
-                    Ver todos los productos
-                </a>
-            </div>
-            <% } %>
-
+    <% } %>
 </main>

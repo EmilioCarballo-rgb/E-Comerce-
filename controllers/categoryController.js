@@ -1,8 +1,33 @@
-// Importamos el servicio que interactúa directamente con la base de datos relacional
+// Importamos los servicios necesarios
 const categoryService = require('../services/categoryService');
+
+// 🌟 IMPORTANTE: Agregamos el servicio de productos para poder buscar los artículos de la categoría
+const productService = require('../services/productsService'); 
 
 const categoryController = {
     
+    // 🌟 NUEVA FUNCIÓN: GET /category/:categoryName -> Renderiza vista EJS (SSR)
+    getByCategoryName: (req, res) => {
+        try {
+            const categoryName = req.params.categoryName;
+            
+            // 🌟 CAMBIO AQUÍ: Usamos tu método getCategorySorted
+            const filteredProducts = productService.getCategorySorted(categoryName); 
+
+            res.render('pages/category', { 
+                categoryName: categoryName, 
+                products: filteredProducts 
+            });
+        } catch (error) {
+            console.error("Error en getByCategoryName:", error);
+            res.status(500).send("Error al cargar la página de la categoría");
+        }
+    },
+
+    // -----------------------------------------------------------
+    // RUTAS DE LA API (Mantienen su comportamiento original)
+    // -----------------------------------------------------------
+
     // GET /api/categories -> Estado 200 OK
     getAll: (req, res) => {
         try {

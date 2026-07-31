@@ -1,15 +1,59 @@
-<article class="cart-card">
-    <a href="/products/<%= product.id %>" class="cart-card-link">
-        <img src="<%= product.image %>" alt="<%= product.title %>" class="cart-card-img">
+<article class="cart-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+
+    <!-- flex-grow: 1 empuja el botón siempre hacia abajo -->
+    <a href="/products/<%= product.id %>" class="cart-card-link" style="flex-grow: 1;">
+        <img src="<%= product.image %>" alt="<%= product.name %>" class="cart-card-img">
         <div class="cart-card-body">
-            <h3 class="cart-card-title"><%= product.title %></h3>
+            <h3 class="cart-card-title"><%= product.name %></h3>
             <p class="cart-card-price">$<%= product.price %></p>
             <p class="cart-card-desc"><%= product.description %></p>
         </div>
     </a>
-    <div class="cart-card-actions">
-    <a href="/cart/add/<%= product.id %>" class="btn-add-card" style="text-decoration: none; display: inline-block; text-align: center;">
-        Agregar al carrito 🛒
-    </a>
-</div>
+
+    <div class="cart-card-actions" style="padding: 15px; text-align: center;">
+        <a href="/cart/add/<%= product.id %>" class="btn-add-cart" data-id="<%= product.id %>" style="text-decoration: none; display: inline-block; padding: 10px 20px; background-color: #ff4500; color: white; border-radius: 5px; font-weight: bold; width: 100%; box-sizing: border-box;">
+            Agregar al carrito 🛒
+        </a>
+    </div>
 </article>
+
+<script>
+    // Delegación sobre document + flag global: el partial se incluye una vez por producto,
+    // así que un listener por tarjeta terminaba disparando N fetches por click.
+    if (!window.__cartAddListenerAttached) {
+        window.__cartAddListenerAttached = true;
+
+        document.addEventListener('click', async (e) => {
+            const button = e.target.closest('.btn-add-cart');
+            if (!button) return;
+
+            e.preventDefault();
+
+            const productId = button.dataset.id;
+            const originalText = button.textContent;
+
+            try {
+                const response = await fetch(`/cart/add/${productId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    button.textContent = '¡Agregado al carrito!';
+                    button.style.backgroundColor = '#28a745';
+                    button.style.color = 'white';
+
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.backgroundColor = '#ff4500';
+                        button.style.color = 'white';
+                    }, 3000);
+                }
+            } catch (error) {
+                console.error('Error al agregar al carrito:', error);
+            }
+        });
+    }
+</script>

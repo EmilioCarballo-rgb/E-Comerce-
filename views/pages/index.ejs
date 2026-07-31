@@ -6,7 +6,8 @@
     <% if (mostWanted && mostWanted.length > 0) { %>
         <section class="most-wanted-section" style="padding: 20px; background-color: #f9f9f9; border-radius: 15px; margin: 20px 0;">
             <h2 style="margin-left: 10px;">Los más pedidos 🔥</h2>
-            <div class="product-grid"> <% mostWanted.forEach(product => { %>
+            <div class="product-grid"> 
+                <% mostWanted.forEach(product => { %>
                     <%- include('../partials/productCard', { product: product }) %>
                 <% }) %>
             </div>

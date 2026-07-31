@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import './ProductView.css';
 
 const ProductView = () => {
-  const { id } = useParams(); // Obtenemos el ID de la URL
+  const { id } = useParams(); 
   const navigate = useNavigate();
 
   const [originalData, setOriginalData] = useState(null);
@@ -13,16 +13,20 @@ const ProductView = () => {
     stock: 0,
     description: '',
     store: '',
-    image: ''
+    image: '',
+    category: '' // Añadí category porque tu BD lo usa
   });
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // 1. Cargar los datos del producto
+  // 1. GET: Cargar los datos del producto (Corregido puerto 3001 y /api)
   useEffect(() => {
-    fetch(`http://localhost:3000/products/${id}`)
-      .then((res) => res.json())
+    fetch(`http://localhost:3001/api/products/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Producto no encontrado');
+        return res.json();
+      })
       .then((data) => {
         setOriginalData(data);
         setFormData({
@@ -31,7 +35,8 @@ const ProductView = () => {
           stock: data.stock || 0,
           description: data.description || '',
           store: data.store || '',
-          image: data.image || ''
+          image: data.image || '',
+          category: data.category || ''
         });
         setLoading(false);
       })
@@ -42,7 +47,6 @@ const ProductView = () => {
       });
   }, [id]);
 
-  // Manejador de cambios en los inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -51,30 +55,31 @@ const ProductView = () => {
     });
   };
 
-  // Manejador para los botones de + y - del Stock
   const handleStockChange = (amount) => {
     setFormData((prev) => {
       const newStock = parseInt(prev.stock || 0) + amount;
-      return { ...prev, stock: newStock >= 0 ? newStock : 0 }; // Evitamos stock negativo
+      return { ...prev, stock: newStock >= 0 ? newStock : 0 }; 
     });
   };
 
   // 2. Botón Cancelar: Restaura los datos originales
   const handleCancel = () => {
-    setFormData({
-      name: originalData.name || '',
-      price: originalData.price || 0,
-      stock: originalData.stock || 0,
-      description: originalData.description || '',
-      store: originalData.store || '',
-      image: originalData.image || ''
-    });
-    setError('');
+    if(originalData) {
+      setFormData({
+        name: originalData.name || '',
+        price: originalData.price || 0,
+        stock: originalData.stock || 0,
+        description: originalData.description || '',
+        store: originalData.store || '',
+        image: originalData.image || '',
+        category: originalData.category || ''
+      });
+      setError('');
+    }
   };
 
-  // 3. Botón Guardar: Validación y petición PUT
+  // 3. PUT: Guardar cambios (Corregido puerto, /api y quitado el /edit de la URL)
   const handleSave = () => {
-    // Validaciones requeridas por la US #9
     if (!formData.name.trim()) {
       setError('El nombre es requerido.');
       return;
@@ -94,7 +99,8 @@ const ProductView = () => {
       stock: stockInt || 0
     };
 
-    fetch(`http://localhost:3000/products/${id}/edit`, {
+    // Apuntamos al ID con método PUT
+    fetch(`http://localhost:3001/api/products/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -102,7 +108,7 @@ const ProductView = () => {
       .then((res) => {
         if (res.ok) {
           alert('Producto actualizado con éxito');
-          setOriginalData(payload); // Actualizamos la base original local
+          setOriginalData(payload);
           setError('');
         } else {
           setError('Error al guardar los cambios.');
@@ -111,10 +117,11 @@ const ProductView = () => {
       .catch((err) => setError('Error de conexión al guardar.'));
   };
 
-  // 4. Botón Eliminar: Petición DELETE
+  // 4. DELETE: Eliminar (Corregido puerto, /api y quitado el /delete de la URL)
   const handleDelete = () => {
     if(window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-      fetch(`http://localhost:3000/products/${id}/delete`, {
+      // Apuntamos al ID con método DELETE
+      fetch(`http://localhost:3001/api/products/${id}`, {
         method: 'DELETE'
       })
         .then((res) => {
@@ -129,7 +136,6 @@ const ProductView = () => {
     }
   };
 
-  // Botón para eliminar la imagen
   const handleRemoveImage = () => {
     setFormData({ ...formData, image: '' });
   };
@@ -138,7 +144,6 @@ const ProductView = () => {
 
   return (
     <div className="product-view-container">
-      {/* Encabezado */}
       <div className="product-view-header">
         <h2>Productos &gt; #{id}</h2>
         <button className="btn-delete-header" onClick={handleDelete}>
@@ -148,7 +153,6 @@ const ProductView = () => {
 
       {error && <div className="error-message">{error}</div>}
 
-      {/* Resumen del Producto (Escenario 1 y BONUS 2) */}
       <div className="product-summary-card">
         <div className="summary-image">
           {formData.image ? <img src={formData.image} alt={formData.name} /> : <div className="no-image">Sin Imagen</div>}
@@ -158,7 +162,6 @@ const ProductView = () => {
           <div className="summary-stats">
             <span><strong>${formData.price}</strong> Valor</span>
             <span><strong>{formData.stock}</strong> Stock Disponible</span>
-            {/* BONUS: Enlace al perfil de la tienda */}
             <span className="store-badge">
               <Link to={`/stores/${formData.store}`}>🏪 {formData.store || 'Sin Tienda'}</Link>
             </span>
@@ -166,13 +169,18 @@ const ProductView = () => {
         </div>
       </div>
 
-      {/* Formulario de Edición */}
       <div className="product-edit-form">
         <h3>Información</h3>
         
         <div className="form-group">
           <label>Nombre</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} />
+        </div>
+
+        {/* Agregué el campo Categoría para que coincida con tu base de datos */}
+        <div className="form-group">
+          <label>Categoría</label>
+          <input type="text" name="category" value={formData.category} onChange={handleChange} />
         </div>
 
         <div className="form-group">
@@ -208,7 +216,6 @@ const ProductView = () => {
           </div>
         </div>
 
-        {/* Botones de acción final */}
         <div className="form-actions">
           <button className="btn-cancel" onClick={handleCancel}>Cancelar</button>
           <button className="btn-save" onClick={handleSave}>Guardar</button>

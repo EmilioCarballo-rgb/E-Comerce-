@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
 const Home = () => {
-  const [username] = useState('Olivia');
-  const [productCount] = useState(123);
-  const [categoryCount] = useState(10);
+  // Por ahora dejamos el nombre estático hasta que migremos el Login/Sesiones
+  const [username] = useState('Olivia'); 
+  
+  // Inicializamos los contadores en 0
+  const [productCount, setProductCount] = useState(0);
+  const [categoryCount, setCategoryCount] = useState(0);
+
+  // useEffect se ejecuta automáticamente al abrir la página
+  useEffect(() => {
+    // Hacemos la petición a la ruta de estadísticas de tu backend
+    fetch('http://localhost:3001/api/stats')
+      .then(response => response.json())
+      .then(data => {
+        // Actualizamos el estado con los datos reales.
+        // Nota: Los nombres "data.productos" o "data.categorias" dependerán 
+        // de cómo los envíe tu backend.
+        setProductCount(data.totalProducts || data.productos || 0);
+        setCategoryCount(data.totalCategories || data.categorias || 0);
+      })
+      .catch(error => console.error("Error cargando estadísticas:", error));
+  }, []);
 
   return (
     <div className="home-container">
