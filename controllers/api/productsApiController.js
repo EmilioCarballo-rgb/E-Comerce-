@@ -1,52 +1,65 @@
-const productsService = require('../../services/productsService'); // Ajusta la ruta
+const productsService = require('../../services/productsService');
 
 const productsApiController = {
-    // Listar todos los productos (Para el listado en React)
-    list: (req, res) => {
+    // 1. Listar todos los productos
+    list: async (req, res) => {
         try {
-            // Podemos capturar query strings de la URL si el React pide ordenamiento
-            // Ejemplo: /api/products?orden=asc
-            const orden = req.query.orden || ''; 
-            
-            // Llamamos a TU servicio
-            const products = productsService.getSorted(orden);
-            
-            // Requisito del Sprint: Devolver JSON y Status 200 (OK)
-            return res.status(200).json({
-                meta: {
-                    status: 200,
-                    total: productsService.count(), // Usamos tu método count()
-                    url: '/api/products'
-                },
-                data: products
-            });
+            const products = await productsService.getAll();
+            // Estado 200 y JSON con la lista
+            res.status(200).json(products);
         } catch (error) {
-            console.error(error);
-            // Requisito del Sprint: Status 500 (Internal Server Error)
-            return res.status(500).json({ error: 'Error interno del servidor' });
+            res.status(500).json({ error: "Error interno del servidor" });
         }
     },
 
-    // Detalle de un producto (Para editar en React)
-    detail: (req, res) => {
+    // 2. Detalle de un producto específico
+    detail: async (req, res) => {
         try {
-            const id = req.params.id;
-            const product = productsService.getById(id); // Llamamos a TU servicio
-
+            const product = await productsService.getById(req.params.id);
+            
+            // Validación requerida: Si no existe, devolver 404 con mensaje específico
             if (!product) {
-                // Requisito del Sprint: Status 404 (Not Found)
-                return res.status(404).json({ error: 'Producto no encontrado' });
+                return res.status(404).json({ error: "Producto no encontrado" });
             }
-
-            return res.status(200).json({
-                meta: { status: 200, url: `/api/products/${id}` },
-                data: product
-            });
+            
+            res.status(200).json(product);
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Error interno del servidor' });
+            res.status(500).json({ error: "Error al buscar el producto" });
+        }
+    },
+
+    // 3. Crear producto
+    create: async (req, res) => {
+        try {
+            const newProduct = await productsService.create(req.body);
+            res.status(201).json(newProduct);
+        } catch (error) {
+            // AGREGAMOS ESTA LÍNEA PARA VER EL ERROR EN LA TERMINAL:
+            console.error("🔥 Error real al guardar:", error); 
+            
+            res.status(500).json({ error: "Error al crear el producto" });
+        }
+    },
+    // 4. Actualizar producto
+    update: async (req, res) => {
+        try {
+            const updatedProduct = await productsService.update(req.params.id, req.body);
+            res.status(200).json(updatedProduct);
+        } catch (error) {
+            res.status(500).json({ error: "Error al actualizar el producto" });
+        }
+    },
+
+    // 5. Eliminar producto
+    destroy: async (req, res) => {
+        try {
+            await productsService.delete(req.params.id);
+            // Podemos devolver 200 OK con un mensaje de éxito, o 204 No Content
+            res.status(200).json({ message: "Producto eliminado correctamente" });
+        } catch (error) {
+            res.status(500).json({ error: "Error al eliminar el producto" });
         }
     }
 };
 
-module.exports = productsApiController;
+module.exports = productsApiController;     

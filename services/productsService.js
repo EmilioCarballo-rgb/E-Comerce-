@@ -57,6 +57,43 @@ const productsService = {
     count: () => {
         const result = db.prepare('SELECT COUNT(*) as total FROM products').get();
         return result.total;
+    },
+    // --- NUEVOS MÉTODOS PARA EL PANEL DE ADMINISTRADOR ---
+
+    // Obtener todos los productos (sin ordenar)
+    getAll: () => {
+        return db.prepare("SELECT * FROM products").all();
+    },
+
+    // Crear un nuevo producto
+    create: (data) => {
+        // Cambiamos "store" por "category" en la consulta SQL
+        const stmt = db.prepare('INSERT INTO products (name, price, stock, description, category, image) VALUES (?, ?, ?, ?, ?, ?)');
+        
+        // Usamos data.store (o data.category por las dudas) para que coincida con lo que manda React
+        const categoryValue = data.store || data.category || '';
+        
+        const info = stmt.run(data.name, data.price, data.stock, data.description, categoryValue, data.image);
+        return { id: info.lastInsertRowid, ...data };
+    },
+
+    // Actualizar un producto existente
+    update: (id, data) => {
+        // Cambiamos "store" por "category" acá también
+        const stmt = db.prepare('UPDATE products SET name = ?, price = ?, stock = ?, description = ?, category = ?, image = ? WHERE id = ?');
+        
+        const categoryValue = data.store || data.category || '';
+        
+        stmt.run(data.name, data.price, data.stock, data.description, categoryValue, data.image, id);
+        return { id, ...data };
+    },
+
+    // Eliminar un producto
+    delete: (id) => {
+        const stmt = db.prepare('DELETE FROM products WHERE id = ?');
+        stmt.run(id);
+        return true;
     }
 };
+
 module.exports = productsService;
