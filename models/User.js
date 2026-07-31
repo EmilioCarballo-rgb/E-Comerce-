@@ -1,16 +1,6 @@
 // models/User.js
 
-const users = [];
-
 class User {
-    constructor(nombre, apellido, email, password) {
-        this.id = users.length + 1;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.email = email;
-        this.password = password;
-    }
-
     static validate(data) {
         const { nombre, apellido, email, password } = data;
         const errores = [];
@@ -53,16 +43,6 @@ class User {
         }
 
         return errores;
-    }
-
-    static findByEmail(email) {
-        return users.find(u => u.email === email) || null;
-    }
-
-    static create(nombre, apellido, email, password) {
-        const user = new User(nombre, apellido, email, password);
-        users.push(user);
-        return user;
     }
 }
 

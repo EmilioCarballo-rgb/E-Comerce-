@@ -3,10 +3,17 @@
 <main class="login-main">
     <section class="login-card">
         <h2>¡Bienvenido a Mateando 🧉!</h2>
-        <form action="/login" method="POST" class="login-form">
+        <% if (errores && errores.length > 0) { %>
+            <ul class="error-list">
+                <% errores.forEach(error => { %>
+                    <li class="error-message" style="display: block;"><%= error %></li>
+                <% }) %>
+            </ul>
+        <% } %>
+        <form action="/users/login" method="POST" class="login-form">
             <div class="form-group">
-                <label for="user" class="sr-only">Usuario</label>
-                <input type="text" id="user" name="user" placeholder="Usuario" required>
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" id="email" name="email" placeholder="Email" required>
             </div>
             <div class="form-group">
                 <label for="password" class="sr-only">Contraseña</label>
@@ -15,7 +22,7 @@
             <button type="submit" class="btn-submit">Iniciar Sesión</button>
         </form>
         <div class="login-link">
-            <p>¿No tienes cuenta? <a href="/register">Registrate</a></p>
+            <p>¿No tienes cuenta? <a href="/users/register">Registrate</a></p>
             <p><a href="/" class="btn-back">Volver al inicio</a></p>
         </div>
     </section>
