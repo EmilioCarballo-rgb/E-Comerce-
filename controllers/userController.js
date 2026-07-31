@@ -4,7 +4,6 @@ const userService = require('../services/userService');
 const userController = {
 
     getRegister: (req, res) => {
-        // Agregamos layout: false
         res.render("pages/register", { errores: [], oldData: {}, layout: false });
     },
 
@@ -26,7 +25,7 @@ const userController = {
             return res.render("pages/register", {
                 errores: errores,
                 oldData: { nombre: nom, apellido: ape, email: mail },
-                layout: false // También lo agregamos acá por si falla la validación
+                layout: false 
             });
         }
 
@@ -36,7 +35,6 @@ const userController = {
     },
 
     getLogin: (req, res) => {
-        // Agregamos layout: false
         res.render("pages/login", { errores: [], layout: false });
     },
 
