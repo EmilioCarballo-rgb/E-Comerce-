@@ -1,4 +1,4 @@
-// models/User.js
+
 
 class User {
     static validate(data) {
