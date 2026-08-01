@@ -13,8 +13,8 @@ const statsApiController = {
                 totalCategories: totalCategories
             });
         } catch (error) {
-        console.error("🔥 ERROR REAL EN STATS:", error); // <--- CAMBIÁ ESTO
-        res.status(500).json({ error: error.message });   // <--- Y ESTO PARA QUE LO MUESTRE EN EL NAVEGADOR
+        console.error("🔥 ERROR REAL EN STATS:", error); 
+        res.status(500).json({ error: error.message });
     }
     }
 };

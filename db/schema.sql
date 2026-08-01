@@ -1,5 +1,11 @@
 -- db/schema.sql
 
+-- Tabla de Categorías (NUEVA)
+CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
 -- Tabla de Productos
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,6 +47,15 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+-- Poblar la base de datos con las categorías iniciales
+INSERT INTO categories (name) VALUES 
+('bombillas'), 
+('yerbas'), 
+('mates'), 
+('materas'), 
+('termos');
+
+-- Poblar la base de datos con los productos iniciales
 INSERT INTO products (name, price, category, image, description, isMostWanted, stock) VALUES 
 ('Bombilla de Acero', 7500, 'bombillas', 'https://apolomates.com.ar/wp-content/uploads/2016/08/Pico-de-loro-acero-1.jpg', 'Bombilla de Acero: Higiénica y eterna. Fabricada en acero inoxidable de grado alimenticio, no altera el sabor, es fácil de limpiar y no se oxida jamás.', 1, 10),
 ('Yerba Baldo', 11000, 'yerbas', 'https://dcdn-us.mitiendanube.com/stores/003/785/409/products/img_9646-555cdc320e74ba0b2e17157276494120-1024-1024.webp', 'Yerba Baldo: De origen brasileño pero con estándar uruguayo. De molienda fina (tipo P.U.1), ofrece un sabor intenso y duradero, ideal para mates largos.', 0, 10),
