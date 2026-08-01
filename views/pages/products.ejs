@@ -5,7 +5,7 @@
         
         <div style="flex: 1; min-width: 300px;">
             <% 
-                // Bonus: Imagen de fallback si no existe
+
                 let imagePath = product.image ? product.image : 'https://via.placeholder.com/500?text=Mate+No+Disponible';
             %>
             <img src="<%= imagePath %>" alt="<%= product.name %>" style="width: 100%; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">

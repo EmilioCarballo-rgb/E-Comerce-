@@ -79,21 +79,21 @@
         document.querySelectorAll('.error-message').forEach(s => s.style.display = 'none');
         document.querySelectorAll('input').forEach(i => i.classList.remove('invalid'));
 
-        // 1. Campos obligatorios
+
         if (!values.nombre) showError(fields.nombre, "El nombre es obligatorio.");
         if (!values.apellido) showError(fields.apellido, "El apellido es obligatorio.");
         
-        // 2. Email válido
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(values.email)) showError(fields.email, "Email no válido.");
 
-        // 3. Password (8 caracteres, letra, número, especial)
+
         const passRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
         if (!passRegex.test(values.password)) {
             showError(fields.password, "Mínimo 8 caracteres, una letra, un número y un carácter especial.");
         }
 
-        // 4. Cadenas prohibidas
+
         const forbidden = [
             "password", "1234", "qwerty", 
             siteName.toLowerCase(), values.nombre.toLowerCase(), values.apellido.toLowerCase()
@@ -103,12 +103,12 @@
             showError(fields.password, "La contraseña es muy débil o contiene datos personales.");
         }
 
-        // 5. Password != Email
+
         if (values.password === values.email && values.password !== "") {
             showError(fields.password, "La contraseña no puede ser igual al email.");
         }
 
-        // 6. Confirmación de password
+
         if (values.password !== values.confirm) {
             showError(fields.confirm, "Las contraseñas no coinciden.");
         }

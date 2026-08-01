@@ -6,11 +6,11 @@ const session = require('express-session');
 
 const app = express();
 
-// --- IMPORTACIONES DE RUTAS API ---
+
 const productsApiRoutes = require('./routes/api/productsApiRoutes');
 const categoriesApiRoutes = require('./routes/api/categoriesApiRoutes'); 
 const statsApiRoutes = require('./routes/api/statsApiRoutes'); 
-// --- MIDDLEWARES GLOBALES ---
+
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors()); 
@@ -18,12 +18,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 
-// --- RUTAS API ---
+
 app.use('/api/products', productsApiRoutes);
 app.use('/api/categories', categoriesApiRoutes); 
 app.use('/api/stats', statsApiRoutes);
 
-// --- CONFIGURACIÓN DE SESIÓN ---
+
 app.use(session({
     secret: 'secreto-ecommerce-mate', 
     resave: false,
@@ -35,24 +35,24 @@ app.use((req, res, next) => {
     next();
 });
 
-// --- MOTOR DE VISTAS ---
+
 app.set('view engine', 'ejs'); 
 app.set('views', path.join(__dirname, 'views'));
 
-// --- IMPORTACIONES DE RUTAS TRADICIONALES (Vistas HTML) ---
+
 const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productsController = require('./controllers/productController');
 
-// --- RUTAS TRADICIONALES ---
+
 app.get('/', productsController.index);
 app.use('/users', userRoutes);
 app.use('/cart', cartRoutes);
 app.use('/category', categoryRoutes);
 app.use('/products', productRoutes);
 
-// --- INICIO DEL SERVIDOR ---
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));

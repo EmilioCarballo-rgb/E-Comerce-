@@ -1,7 +1,7 @@
 const categoryService = require('../../services/categoryService');
 
 const categoriesApiController = {
-    // 1. Listar todas las categorías
+
     list: async (req, res) => {
         try {
             const categories = await categoryService.getAll();
@@ -12,7 +12,7 @@ const categoriesApiController = {
         }
     },
 
-    // 2. Detalle de una categoría específica
+
     detail: async (req, res) => {
         try {
             const category = await categoryService.getById(req.params.id);
@@ -26,7 +26,7 @@ const categoriesApiController = {
         }
     },
 
-    // 3. Crear categoría
+
     create: async (req, res) => {
         try {
             const newCategory = await categoryService.create(req.body);
@@ -37,7 +37,7 @@ const categoriesApiController = {
         }
     },
 
-    // 4. Actualizar categoría
+
     update: async (req, res) => {
         try {
             const updatedCategory = await categoryService.update(req.params.id, req.body);
@@ -48,7 +48,7 @@ const categoriesApiController = {
         }
     },
 
-    // 5. Eliminar categoría
+
     destroy: async (req, res) => {
         try {
             await categoryService.delete(req.params.id);

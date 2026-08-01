@@ -1,17 +1,17 @@
-// Importamos los servicios necesarios
+
 const categoryService = require('../services/categoryService');
 
-// 🌟 IMPORTANTE: Agregamos el servicio de productos para poder buscar los artículos de la categoría
+
 const productService = require('../services/productsService'); 
 
 const categoryController = {
     
-    // 🌟 NUEVA FUNCIÓN: GET /category/:categoryName -> Renderiza vista EJS (SSR)
+
     getByCategoryName: (req, res) => {
         try {
             const categoryName = req.params.categoryName;
             
-            // 🌟 CAMBIO AQUÍ: Usamos tu método getCategorySorted
+
             const filteredProducts = productService.getCategorySorted(categoryName); 
 
             res.render('pages/category', { 
@@ -24,11 +24,11 @@ const categoryController = {
         }
     },
 
-    // -----------------------------------------------------------
-    // RUTAS DE LA API (Mantienen su comportamiento original)
-    // -----------------------------------------------------------
 
-    // GET /api/categories -> Estado 200 OK
+
+
+
+
     getAll: (req, res) => {
         try {
             const categories = categoryService.getAll();
@@ -38,7 +38,7 @@ const categoryController = {
         }
     },
 
-    // GET /api/categories/:id -> Estado 200 OK (o 404 si no existe)
+
     getById: (req, res) => {
         try {
             const id = req.params.id;
@@ -54,7 +54,7 @@ const categoryController = {
         }
     },
 
-    // POST /api/categories -> Estado 201 Created
+
     create: (req, res) => {
         try {
             const newCategoryData = req.body;
@@ -66,7 +66,7 @@ const categoryController = {
         }
     },
 
-    // PUT /api/categories/:id -> Estado 200 OK
+
     update: (req, res) => {
         try {
             const id = req.params.id;
@@ -84,7 +84,7 @@ const categoryController = {
         }
     },
 
-    // DELETE /api/categories/:id -> Estado 200 OK
+
     delete: (req, res) => {
         try {
             const id = req.params.id;
